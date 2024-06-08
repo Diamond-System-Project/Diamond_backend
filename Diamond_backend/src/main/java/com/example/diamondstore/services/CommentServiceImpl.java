@@ -78,16 +78,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getAllCommentsByProductId(Integer productId) {
-        return commentRepository.findAllByProductId(productId);
+        return commentRepository.findAllByProductId(productRepository.findProductByProductId(productId));
     }
 
     @Override
     public List<Comment> getAllCommentsByUserId(Integer userId) {
-        return commentRepository.findAllByUserId(userId);
+        return commentRepository.findAllByUserId(userRepository.findUserByUserId(userId));
     }
 
     @Override
     public List<Comment> getAllCommentsByUserIdAndProductId(Integer userId, Integer productId) {
-        return commentRepository.findAllByUserIdAndProductId(userId, productId);
+        return commentRepository.findAllByUserIdAndProductId(userRepository.findUserByUserId(userId), productRepository.findProductByProductId(productId));
     }
 }

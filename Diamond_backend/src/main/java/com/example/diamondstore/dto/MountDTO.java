@@ -13,4 +13,5 @@ public class MountDTO {
     String type;
     String material;
     float basePrice;
+
 }

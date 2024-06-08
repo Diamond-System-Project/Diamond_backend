@@ -1,6 +1,7 @@
 package com.example.diamondstore.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.Collection;
 import java.util.Date;
 
 @Builder
@@ -26,8 +28,10 @@ public class Order {
     @Column(name = "orderid")
     private Integer orderId;
 
-    @Column(name = "customerid")
-    private Integer cid;
+
+    @ManyToOne
+    @JoinColumn(name = "customerid", nullable = false)
+    private User cid;
 
     @NotBlank(message = "Customer name is required")
     @Column(name = "customer_name", nullable = false)
@@ -40,7 +44,7 @@ public class Order {
     @Column(name = "address")
     private String address;
 
-    @Email(regexp = ".+@gmail\\..+", message = "Email must be a valid Gmail address")
+    @Email(regexp = "^[a-zA-Z][a-zA-Z0-9._%+-]*@gmail\\.[a-zA-Z]{2,}$", message = "Email must be a valid Gmail address and should not start with a digit")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -88,4 +92,8 @@ public class Order {
             throw new IllegalArgumentException("Delivery date must be after the order date");
         }
     }
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Collection<OrderDetail> orderDetails;
 }

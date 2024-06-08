@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comment")
+
 public class CommentController {
 
     @Autowired
@@ -46,7 +47,7 @@ public class CommentController {
             Authentication authentication
     ) {
         try {
-            // Kiểm tra người dùng đã đăng nhập
+
             if (authentication == null || !authentication.isAuthenticated()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
             }

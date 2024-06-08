@@ -1,32 +1,24 @@
 package com.example.diamondstore.services.interfaces;
 
-
+import com.example.diamondstore.dto.OrderDTO;
+import com.example.diamondstore.dto.UpdateOrderDTO;
 import com.example.diamondstore.entities.Order;
-import com.example.diamondstore.response.ApiResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public interface OrderService {
-    Order saveOrder(Order order);
+    Order createOrder(OrderDTO orderDTO);
 
     List<Order> getAllOrder();
 
-    void deleteOrder(int orderid);
+    void deleteOrder(Integer orderId);
 
-    Optional<Order> getOrderId(int orderid);
+    Order getOrderId(Integer orderId);
 
-    void updateOrderbyMember(String cname, String address, String phone, String email, String paymentMethod, Integer orderId);
+    Order updateOrderByMember(UpdateOrderDTO updateOrderDTO, Integer orderId);
 
-
-
-//    List<Order> findOrdersbycustomerid(int cid);
-
-
-
-
+    List<Order> getOrdersByUserId(Integer userId);  // Đảm bảo phương thức này tồn tại
 }

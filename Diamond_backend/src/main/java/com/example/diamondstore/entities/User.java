@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Builder
 @Entity
@@ -63,4 +64,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Comment> comments;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cid", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Order> orders;
 }

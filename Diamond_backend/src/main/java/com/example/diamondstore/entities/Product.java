@@ -56,4 +56,12 @@ public class Product {
     @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Comment> comments;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Collection<OrderDetail> orderDetails;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Collection<Warranty> warranties;
+
 }
