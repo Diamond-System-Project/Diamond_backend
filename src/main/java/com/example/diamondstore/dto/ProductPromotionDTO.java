@@ -8,18 +8,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateUser {
-    private String fullName;
-    private String email;
-    private String password;
-    private String phone;
-    private String gender;
+
+public class ProductPromotionDTO {
+    private int promotionId;
+    private List<Integer> productIds;
+    private float discount;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE)
-    private Date dob;
+    private Date startDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @Temporal(TemporalType.DATE)
+    private Date endDate;
 }

@@ -1,5 +1,6 @@
 package com.example.diamondstore.services.interfaces;
 
+import com.example.diamondstore.dto.PasswordResetDTO;
 import com.example.diamondstore.dto.UpdateUser;
 import com.example.diamondstore.dto.UserLoginResponse;
 import com.example.diamondstore.entities.User;
@@ -21,4 +22,6 @@ public interface UserService {
     User updateUser(UpdateUser updateUser, int id);
     boolean updateStatusByUserid(String status, int userid);
     //void deleteById(Long id);
+    String forgotPass(String email);
+    String resetPass(String token, PasswordResetDTO passwordResetDTO);
 }

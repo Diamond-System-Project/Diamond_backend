@@ -1,11 +1,13 @@
 package com.example.diamondstore.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
 import java.util.Date;
 
 @Builder
@@ -34,4 +36,8 @@ public class DiamondMount {
 
     @Column(name = "base_price")
     private float basePrice;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "mountId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Collection<Product> products;
 }

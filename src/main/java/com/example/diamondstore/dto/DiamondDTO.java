@@ -12,10 +12,10 @@ public class DiamondDTO {
     private String diamondName;
     private String imageUrl;
     private String origin;
+    private String shape;
     private float caratWeight;
     private String color;
     private String clarity;
     private String cut;
-    private String type;
     private float basePrice;
 }

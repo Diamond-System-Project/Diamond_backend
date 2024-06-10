@@ -137,6 +137,35 @@ public class UserController {
         }
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse> forgotPass(@RequestBody EmailDTO emailDTO){
+        String response = userService.forgotPass(emailDTO.getEmail());
+
+        if(!response.startsWith("Invalid")){
+            response = "http://localhost:3000/api/user/reset-password?token=" + response;
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("Create token success!")
+                    .data(response)
+                    .build());
+        }
+        else{
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(false)
+                    .message(response)
+                    .build());
+        }
+    }
+
+    @PutMapping("/reset-password")
+    public ResponseEntity<ApiResponse> resetPass(@RequestParam String token, @RequestBody PasswordResetDTO passwordResetDTO){
+        return ResponseEntity.ok(ApiResponse.builder()
+                .success(true)
+                .message(userService.resetPass(token, passwordResetDTO))
+                .build());
+
+    }
+
 //    @DeleteMapping("/delete/{id}")
 //    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long id) {
 //        if(!userService.getUserId(id).isPresent()){

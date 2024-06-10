@@ -1,10 +1,13 @@
 package com.example.diamondstore.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Collection;
 
 @Builder
 @Entity
@@ -39,9 +42,13 @@ public class Diamond {
     @Column(name = "cut")
     private String cut;
 
-    @Column(name = "type", nullable = false)
-    private String type;
+    @Column(name = "shape", nullable = false)
+    private String shape;
 
     @Column(name = "base_price")
     private float basePrice;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "diamondId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Collection<ProductDiamond> productDiamonds;
 }

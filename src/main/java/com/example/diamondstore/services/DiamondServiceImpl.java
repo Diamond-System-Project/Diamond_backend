@@ -36,7 +36,7 @@ public class DiamondServiceImpl implements DiamondService{
                 .color(diamondDTO.getColor())
                 .clarity(diamondDTO.getClarity())
                 .cut(diamondDTO.getCut())
-                .type(diamondDTO.getType())
+                .shape(diamondDTO.getShape())
                 .basePrice(diamondDTO.getBasePrice())
                 .build());
         return saveDiamond;
@@ -52,7 +52,7 @@ public class DiamondServiceImpl implements DiamondService{
         saveDiamond.setColor(diamondDTO.getColor());
         saveDiamond.setClarity(diamondDTO.getClarity());
         saveDiamond.setCut(diamondDTO.getCut());
-        saveDiamond.setType(diamondDTO.getType());
+        saveDiamond.setShape(diamondDTO.getShape());
         saveDiamond.setBasePrice(diamondDTO.getBasePrice());
 
         return diamondRepository.save(saveDiamond);

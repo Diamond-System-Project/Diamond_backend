@@ -26,7 +26,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .authorizeRequests(authorize -> authorize
-                       .requestMatchers("/*/*/login", "/*/*/register", "/*/*/payment/*").permitAll() // Permit access to /login endpoint
+                       .requestMatchers("/*/*/login", "/*/*/register", "/*/*/payment/*",
+                               "/*/*/forgot-password", "/*/*/reset-password").permitAll() // Permit access to /login endpoint
   //                     .requestMatchers("/api/user/alluser").authenticated() // Other authenticated endpoints
                         .anyRequest().authenticated()
                 )

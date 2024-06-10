@@ -1,5 +1,6 @@
 package com.example.diamondstore.services;
 
+import com.example.diamondstore.dto.PasswordResetDTO;
 import com.example.diamondstore.dto.UpdateUser;
 import com.example.diamondstore.dto.UserLoginResponse;
 import com.example.diamondstore.entities.User;
@@ -13,11 +14,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.print.attribute.standard.DateTimeAtCreation;
 import java.text.DateFormat;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -27,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private static final long EXPIRE_TOKEN=30;
 
     @Override
     public User register(String fullName, String email, String password, String phone, String gender, Date dob) {
@@ -103,6 +108,66 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateStatusByUserid(String status, int userid) {
         return userRepository.updateStatusByUserId(status, userid) == 1;
+    }
+
+    @Override
+    public String forgotPass(String email) {
+        User user = userRepository.findUserByEmail(email);
+
+        if(user == null){
+            return "Invalid email.";
+        }
+
+        user.setTokenPassword(generateToken());
+        user.setTokenCreateDate(new Date());
+
+        user = userRepository.save(user);
+        return user.getTokenPassword();
+    }
+
+    @Override
+    public String resetPass(String token, PasswordResetDTO passwordResetDTO) {
+        Optional<User> userOptional= Optional.ofNullable(userRepository.findUserByTokenPassword(token));
+
+        if(!userOptional.isPresent()){
+            return "Invalid token";
+        }
+        Date tokenCreationDate = userOptional.get().getTokenCreateDate();
+
+        if (isTokenExpired(tokenCreationDate)) {
+            return "Token expired.";
+
+        }
+
+        if(!passwordResetDTO.getPassword().equals(passwordResetDTO.getConfirm())){
+            return "Confirm password not match!";
+        }
+
+        User user = userOptional.get();
+
+        user.setPassword(bCryptPasswordEncoder.encode(passwordResetDTO.getPassword()));
+        user.setTokenPassword(null);
+        user.setTokenCreateDate(null);
+
+        userRepository.save(user);
+
+        return "Your password successfully updated.";
+    }
+
+    private String generateToken() {
+        StringBuilder token = new StringBuilder();
+
+        return token.append(UUID.randomUUID())
+                .append(UUID.randomUUID()).toString();
+    }
+
+    private boolean isTokenExpired(Date tokenCreationDate) {
+        Instant tokenCreationInstant = tokenCreationDate.toInstant();
+        Instant nowInstant = Instant.now();
+
+        Duration diff = Duration.between(tokenCreationInstant, nowInstant);
+
+        return diff.toMinutes() >= EXPIRE_TOKEN;
     }
 
     @Override
