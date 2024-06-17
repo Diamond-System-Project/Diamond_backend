@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,19 +22,20 @@ public class SecurityConfig {
     @Autowired
     private JWTAuthenticationFilter filter;
 
+    @Autowired
+    private CorsFilter corsFilter; // Inject the CorsFilter
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // Add the CorsFilter before other filters
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/*/*/login", "/*/*/logout", "/*/*/register", "/*/*/payment/*",
                                 "/*/*/forgot-password", "/*/*/reset-password",
                                 "/*/*/createWithDetails", "/*/comment/product/*",
                                 "/*/*/allproduct", "/*/product/search/*").permitAll() // Permit access to /login endpoint
-                        //                     .requestMatchers("/api/user/alluser").authenticated() // Other authenticated endpoints
                         .anyRequest().authenticated()
                 )
-
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -46,3 +48,6 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
+
+
+

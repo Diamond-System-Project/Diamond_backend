@@ -44,8 +44,11 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(createOrderRequestDTO.getOrder().getAddress());
         order.setPayment_method(createOrderRequestDTO.getOrder().getPayment_method());
         order.setStatus("Pending");
-        if(userId != null)
-            order.setCid(userRepository.findUserByUserId(userId));
+        if(userId != null){
+            User user = userRepository.findUserByUserId(userId);
+            order.setCid(user);
+            order.setEmail(user.getEmail());
+        }
 
         Voucher voucher;
         if(createOrderRequestDTO.getOrder().getVoucherId() != null){

@@ -262,6 +262,42 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/history/{userId}")
+    public ResponseEntity<ApiResponse> getOrdersByCurrentUserId(@PathVariable Integer userId, HttpServletRequest request) {
+        try {
+            if (userService.getUserById(userId) == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                        ApiResponse.builder()
+                                .success(false)
+                                .message("User Not Found")
+                                .build());
+            }
+            String authorizationHeader = request.getHeader("Authorization");
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                String token = authorizationHeader.substring(7);
+                int currentUserId = jwtUtil.extractUserId(token);
+                if (userId != currentUserId) {
+                    return ResponseEntity.ok(ApiResponse.builder()
+                            .success(false)
+                            .message("Does not have permission to view this user!")
+                            .build());
+                }
+            }
+            List<Order> orders = orderService.getOrdersByUserId(userId);
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("List of Orders by User ID:")
+                    .data(orders)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    ApiResponse.builder()
+                            .success(false)
+                            .message("Failed to list orders: " + e.getMessage())
+                            .build());
+        }
+    }
+
     @GetMapping("/delivery/{id}")
     public ResponseEntity<ApiResponse> getOrdersByDeliveryStaffId(@PathVariable Integer id) {
         try {
