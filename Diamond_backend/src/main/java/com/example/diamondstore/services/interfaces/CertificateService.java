@@ -8,16 +8,11 @@ import java.util.List;
 
 @Service
 public interface CertificateService {
-
     Certificate createCertificate(CertificateDTO certificateDTO);
-
     List<Certificate> getAllCertificate();
-
     void deleteCertificate(Integer certificateId);
-
     Certificate updateCertificate(CertificateDTO certificateDTO, int id);
-
     Certificate getCertificateId(Integer certificateId);
-
-    List<Certificate> getCertificateByDiamondId(Integer diamondId);
+    Certificate getCertificateByDiamondId(Integer diamondId);
+    List<Certificate> getCertificateByProductId(Integer productId);
 }

@@ -44,7 +44,6 @@ public class ProductServiceImpl implements ProductService {
     public Product createProduct(ProductDTO productDTO) {
         Product saveProduct = productRepository.save(Product.builder()
                 .productName(productDTO.getProductName())
-                .imageUrl(productDTO.getImageUrl())
                 .description(productDTO.getDescription())
                 .mountId(diamondMountRepository.findDiamondMountByMountId(productDTO.getMountId()))
                 .laborFee(productDTO.getLaborFee())
@@ -59,7 +58,6 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(ProductDTO productDTO, int id) {
         Product saveProduct = productRepository.findProductByProductId(id);
         saveProduct.setProductName(productDTO.getProductName());
-        saveProduct.setImageUrl(productDTO.getImageUrl());
         saveProduct.setDescription(productDTO.getDescription());
         saveProduct.setLaborFee(productDTO.getLaborFee());
         saveProduct.setStatus(productDTO.getStatus());

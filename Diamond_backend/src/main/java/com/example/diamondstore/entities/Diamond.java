@@ -24,9 +24,6 @@ public class Diamond {
     @Column(name = "diamond_name", nullable = false)
     private String diamondName;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(name = "origin", nullable = false)
     private String origin;
 

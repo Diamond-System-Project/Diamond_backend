@@ -12,6 +12,7 @@ import com.example.diamondstore.services.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,8 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private DiamondMountService diamondMountService;
-    @Autowired private ProductPriceService productPriceService;
+    @Autowired
+    private ProductPriceService productPriceService;
 
     @GetMapping("/allproduct")
     public ResponseEntity<ApiResponse> getAllProduct() throws Exception {
@@ -46,7 +48,8 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/showProduct/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getProductId(@PathVariable int id) throws Exception {
         Product product = productService.getProductById(id);
         if(product != null){
@@ -64,6 +67,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createProduct(@RequestBody ProductDTO productDTO) throws Exception {
         try{
             if(diamondMountService.getMountById(productDTO.getMountId()) == null){
@@ -90,6 +94,7 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductDTO productDTO, @PathVariable int id) throws Exception {
         try{
             if(productService.getProductById(id) == null){
@@ -138,6 +143,7 @@ public class ProductController {
     }
 
     @GetMapping("/list/{type}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getProductsByMountType(@PathVariable String type) throws Exception {
         try {
             List<Product> list = productService.getProductsByMountType(type);

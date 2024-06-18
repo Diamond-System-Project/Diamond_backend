@@ -12,6 +12,7 @@ import com.example.diamondstore.services.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class ProductDiamondController {
     private DiamondService diamondService;
 
     @GetMapping("/allproductdiamond")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllProductDiamond() throws Exception {
         List<ProductDiamond> productDiamondList = productDiamondService.productDiamondList();
         if(productDiamondList.isEmpty()){
@@ -47,6 +49,7 @@ public class ProductDiamondController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getProductDiamondId(@PathVariable int id) throws Exception {
         ProductDiamond productDiamond = productDiamondService.getProductDiamondById(id);
         if(productDiamond != null){
@@ -64,6 +67,7 @@ public class ProductDiamondController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createProductDiamond(@RequestBody ProductDiamondDTO productDiamondDTO) throws Exception {
         try{
             if(productService.getProductById(productDiamondDTO.getProductId()) == null){
@@ -107,6 +111,7 @@ public class ProductDiamondController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateProductDiamond(@RequestBody UpdateProductDiamondDTO updateProductDiamondDTO, @PathVariable int id) throws Exception {
         try{
             if(productDiamondService.getProductDiamondById(id) == null){
@@ -137,6 +142,7 @@ public class ProductDiamondController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> deleteProductDiamond(@PathVariable int id) throws Exception {
         try{
             if(productDiamondService.getProductDiamondById(id) == null){

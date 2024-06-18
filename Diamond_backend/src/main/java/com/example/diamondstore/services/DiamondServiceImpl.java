@@ -30,7 +30,6 @@ public class DiamondServiceImpl implements DiamondService{
     public Diamond createDiamond(DiamondDTO diamondDTO) {
         Diamond saveDiamond = diamondRepository.save(Diamond.builder()
                 .diamondName(diamondDTO.getDiamondName())
-                .imageUrl(diamondDTO.getImageUrl())
                 .origin(diamondDTO.getOrigin())
                 .caratWeight(diamondDTO.getCaratWeight())
                 .color(diamondDTO.getColor())
@@ -46,7 +45,6 @@ public class DiamondServiceImpl implements DiamondService{
     public Diamond updateDiamond(DiamondDTO diamondDTO, int id) {
         Diamond saveDiamond = diamondRepository.findDiamondByDiamondId(id);
         saveDiamond.setDiamondName(diamondDTO.getDiamondName());
-        saveDiamond.setImageUrl(diamondDTO.getImageUrl());
         saveDiamond.setOrigin(diamondDTO.getOrigin());
         saveDiamond.setCaratWeight(diamondDTO.getCaratWeight());
         saveDiamond.setColor(diamondDTO.getColor());

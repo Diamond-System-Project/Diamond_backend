@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class DiamondDTO {
     private String diamondName;
-    private String imageUrl;
     private String origin;
     private float caratWeight;
     private String color;

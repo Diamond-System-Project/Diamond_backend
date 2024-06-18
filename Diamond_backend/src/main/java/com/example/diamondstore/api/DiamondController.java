@@ -9,6 +9,7 @@ import com.example.diamondstore.services.interfaces.DiamondService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class DiamondController {
     private DiamondService diamondService;
 
     @GetMapping("/alldiamond")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllDiamond() throws Exception {
         List<Diamond> diamondList = diamondService.DiamondList();
         if(diamondList.isEmpty()){
@@ -38,6 +40,7 @@ public class DiamondController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getDiamondId(@PathVariable int id) throws Exception {
         Diamond diamond = diamondService.getDiamondById(id);
         if(diamond != null){
@@ -55,6 +58,7 @@ public class DiamondController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createDiamond(@RequestBody DiamondDTO diamondDTO) throws Exception {
         try{
             Diamond diamond = diamondService.createDiamond(diamondDTO);
@@ -73,6 +77,7 @@ public class DiamondController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateDiamond(@RequestBody DiamondDTO diamondDTO, @PathVariable int id) throws Exception {
         try{
             if(diamondService.getDiamondById(id) == null){

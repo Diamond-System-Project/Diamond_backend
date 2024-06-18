@@ -11,6 +11,7 @@ import com.example.diamondstore.services.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class InventoryController {
     private ProductService productService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllInventory() throws Exception {
         List<Inventory> list = inventoryService.InventoryList();
         if(list.isEmpty()){
@@ -42,6 +44,7 @@ public class InventoryController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getInventoryId(@PathVariable int id) throws Exception {
         Inventory inventory = inventoryService.getInventoryById(id);
         if(inventory != null){
@@ -59,6 +62,7 @@ public class InventoryController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createInventory(@RequestBody InventoryDTO inventoryDTO) throws Exception {
         try{
             if(productService.getProductById(inventoryDTO.getProductId()) == null){
@@ -96,6 +100,7 @@ public class InventoryController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateInventory(@RequestBody InventoryDTO inventoryDTO, @PathVariable int id) throws Exception {
         try{
             if(inventoryService.getInventoryById(id) == null){
@@ -127,6 +132,7 @@ public class InventoryController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> deleteInventory(@PathVariable int id) {
         Inventory inventory = inventoryService.getInventoryById(id);
         try{

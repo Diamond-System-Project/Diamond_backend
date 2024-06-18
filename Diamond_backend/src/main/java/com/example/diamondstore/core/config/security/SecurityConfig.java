@@ -34,6 +34,26 @@ public class SecurityConfig {
                                 "/*/*/forgot-password", "/*/*/reset-password",
                                 "/*/*/createWithDetails", "/*/comment/product/*",
                                 "/*/*/allproduct", "/*/product/search/*").permitAll() // Permit access to /login endpoint
+
+                        .requestMatchers("/api/comment/add", "/api/comment/edit/*", "/api/order/createWithDetails",
+                                "/api/order/update", "/api/order_detail/create",
+                                "/api/order_detail/update", "/*/order/history/*").hasRole("Member") //Comment
+
+                        .requestMatchers("/api/certificate/*", "/api/diamond/*",
+                                "/api/inventory/*", "/api/promotion/*", "/api/order_detail/orderDetail",
+                                "/api/order_detail/all", "/api/order_detail/order", "/*/order/assign",
+                                "/api/productdiamond/*", "/api/productprice/*", "/api/productpromotion/*",
+                                "/api/order/update" ,"/api/order/update/user", "/*/order/cancel/*",
+                                "/api/product/showProduct/*","/api/product/create",
+                                "/api/product/update", "/api/product/showProduct/list" ).hasRole("Manager")
+
+                        .requestMatchers("/api/order/delivery/*", "/api/order/delivery/status" ).hasRole("Delivery Staff")
+
+                        .requestMatchers("/api/mount/allmount").hasAnyRole("Sales Staff", "Manager")
+                        //cái nào có nhiều role truy cập thì ghi hasAnyRole, không chia hasRole như bên dưới
+
+                        //.requestMatchers("/api/mount/allmount").hasRole("Sales Staff")
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))

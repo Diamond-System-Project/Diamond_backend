@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -33,7 +32,7 @@ public class MyUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleid().getRolename());
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRoleid().getRolename());
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
@@ -44,8 +43,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public String loginToken(UserLogin request) {
         try {
             UserDetails userDetails = this.loadUserByUsername(request.getEmail());
-            String token = jwtHelper.generateToken(userDetails);
-            return token;
+            return jwtHelper.generateToken(userDetails);
         } catch (AuthenticationException e) {
             e.printStackTrace();
             return null;

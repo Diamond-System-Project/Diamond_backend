@@ -8,6 +8,7 @@ import com.example.diamondstore.services.interfaces.DiamondService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CertificateController {
     private DiamondService diamondService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createCertificate(@RequestBody CertificateDTO certificateDTO) {
         try {
             if(diamondService.getDiamondById(certificateDTO.getDiamondId()) == null){
@@ -50,6 +52,7 @@ public class CertificateController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllCertificates() {
         try {
             List<Certificate> certificates = certificateService.getAllCertificate();
@@ -69,6 +72,7 @@ public class CertificateController {
     }
 
     @DeleteMapping("/delete/{certificateId}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> deleteCertificate(@PathVariable Integer certificateId) {
         try {
             certificateService.deleteCertificate(certificateId);
@@ -87,6 +91,7 @@ public class CertificateController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateCertificate(@RequestBody CertificateDTO certificateDTO, @PathVariable int id) {
         try {
             Certificate updatedCertificate = certificateService.updateCertificate(certificateDTO, id);
@@ -127,11 +132,11 @@ public class CertificateController {
     @GetMapping("/diamond/{diamondId}")
     public ResponseEntity<ApiResponse> getCertificateByDiamondId(@PathVariable Integer diamondId) {
         try {
-            List<Certificate> certificates = certificateService.getCertificateByDiamondId(diamondId);
+            Certificate certificates = certificateService.getCertificateByDiamondId(diamondId);
             return ResponseEntity.ok(
                     ApiResponse.builder()
                             .success(true)
-                            .message("List of Certificates for Diamond ID: " + diamondId)
+                            .message("Certificate for Diamond ID: " + diamondId)
                             .data(certificates)
                             .build());
         } catch (Exception e) {
@@ -140,6 +145,28 @@ public class CertificateController {
                             .success(false)
                             .message("Error: " + e.getMessage())
                             .build());
+        }
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<ApiResponse> getCertificatesByProductId(@PathVariable Integer productId) {
+        try {
+            List<Certificate> certificates = certificateService.getCertificateByProductId(productId);
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("Certificates retrieved successfully")
+                    .data(certificates)
+                    .build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.builder()
+                    .success(false)
+                    .message("An unexpected error occurred: " + e.getMessage())
+                    .build());
         }
     }
 }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,8 @@ public class OrderDetailController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
+    @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<ApiResponse> updateOrderDetail(@PathVariable Integer id, @RequestBody UpdateOrderDetailDTO updateOrderDetailDTO) {
         try {
             OrderDetail orderDetail = orderDetailService.updateOrderDetail(id, updateOrderDetailDTO);
@@ -96,7 +98,8 @@ public class OrderDetailController {
     }
 
 
-    @GetMapping("/{orderDetailId}")
+    @GetMapping("orderDetail/{orderDetailId}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getOrderDetailById(@PathVariable Integer orderDetailId) {
         try {
             OrderDetail orderDetail = orderDetailService.getOrderDetailById(orderDetailId);
@@ -124,6 +127,7 @@ public class OrderDetailController {
 
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllOrderDetails() {
         try {
             List<OrderDetail> orderDetails = orderDetailService.getAllOrderDetail();
@@ -144,6 +148,7 @@ public class OrderDetailController {
 
 
     @GetMapping("/order/{orderId}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getOrderDetailsByOrderId(@PathVariable Integer orderId) {
         try {
             List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrderId(orderId);
@@ -161,17 +166,4 @@ public class OrderDetailController {
             );
         }
     }
-
-
-
-
-//    @GetMapping("/order/{orderId}/total-price")
-//    public ResponseEntity<?> calculateTotalPrice(@PathVariable Integer orderId) {
-//        try {
-//            float totalPrice = orderDetailService.calculateTotalPrice(orderId);
-//            return ResponseEntity.ok(totalPrice);
-//        } catch (DataNotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
-//        }
-//    }
 }

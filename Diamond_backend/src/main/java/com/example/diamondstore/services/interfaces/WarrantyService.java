@@ -17,7 +17,5 @@ public interface WarrantyService {
     void deleteWarranty(Integer warrantyId) throws DataNotFoundException;
     List<Warranty> viewAllWarranty();
     Warranty getWarrantyById(Integer warrantyId) throws DataNotFoundException;
-    List<Warranty> searchWarrantyByOrderDetailId(Integer id);
-
-
+    List<Warranty> getWarrantyByOrderDetailId(Integer id); //
 }

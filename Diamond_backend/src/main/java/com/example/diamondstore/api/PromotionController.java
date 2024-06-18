@@ -9,6 +9,7 @@ import com.example.diamondstore.services.interfaces.PromotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class PromotionController {
     private PromotionService promotionService;
 
     @GetMapping("/allpromotion")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllPromotion() throws Exception {
         List<Promotion> list = promotionService.promotionList();
         if(list.isEmpty()){
@@ -38,6 +40,7 @@ public class PromotionController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getPromotionId(@PathVariable int id) throws Exception {
         Promotion promotion = promotionService.getPromotionById(id);
         if(promotion != null){
@@ -55,6 +58,7 @@ public class PromotionController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createPromotion(@RequestBody PromotionDTO promotionDTO) throws Exception {
         try{
             if(promotionDTO.getStartDate().compareTo(promotionDTO.getEndDate()) > 0){
@@ -80,6 +84,7 @@ public class PromotionController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updatePromotion(@RequestBody PromotionDTO promotionDTO, @PathVariable int id) throws Exception {
         try{
             if(promotionService.getPromotionById(id) == null){
@@ -110,6 +115,7 @@ public class PromotionController {
     }
 
     @PutMapping("/status/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updatePromotionStatus(@PathVariable int id) throws Exception {
         try{
             if(promotionService.getPromotionById(id) == null){

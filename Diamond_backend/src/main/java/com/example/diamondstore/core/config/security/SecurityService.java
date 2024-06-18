@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 
 @Service("securityService")
 public class SecurityService {
-    public boolean hasAnyRoleId(Authentication authentication, Integer... roleIds) {
+    public boolean hasAnyRole(Authentication authentication, String... rolename) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return false;
         }
         for (GrantedAuthority authority : authentication.getAuthorities()) {
-            for (Integer roleId : roleIds) {
-                if (authority.getAuthority().equals("ROLE_" + roleId)) {
+            for (String roleName : rolename) {
+                if (authority.getAuthority().equals("ROLE_" + roleName)) {
                     return true;
                 }
             }

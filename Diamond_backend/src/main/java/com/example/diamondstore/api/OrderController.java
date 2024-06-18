@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,16 +38,11 @@ public class OrderController {
 
 
     @PostMapping("/createWithDetails")
+    @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<ApiResponse> createOrderWithDetails(@Valid @RequestBody CreateOrderRequestDTO createOrderRequestDTO, HttpServletRequest request) {
         try {
             String authorizationHeader = request.getHeader("Authorization");
             Integer userId = null;
-//            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.builder()
-//                        .success(false)
-//                        .message("User not authenticated")
-//                        .build());
-//            }
 
             if(authorizationHeader != null) {
                 String token = authorizationHeader.substring(7);
@@ -125,6 +121,7 @@ public class OrderController {
 
 
     @GetMapping("/{orderId}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getOrderId(@PathVariable Integer orderId) {
         try {
             Order order = orderService.getOrderId(orderId);
@@ -176,6 +173,7 @@ public class OrderController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllOrders() {
         try {
             List<Order> orders = orderService.getAllOrder();
@@ -194,6 +192,7 @@ public class OrderController {
     }
 
     @PutMapping("/update/{orderId}")
+    @PreAuthorize("hasAnyRole('ROLE_Member', 'ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateOrder(@Valid @RequestBody UpdateOrderDTO updateOrderDTO, @PathVariable Integer orderId) {
         try {
             Order existingOrder = orderService.getOrderId(orderId);
@@ -238,6 +237,7 @@ public class OrderController {
     }
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getOrdersByUserId(@PathVariable Integer userId) {
         try {
             if (userService.getUserById(userId) == null) {
@@ -263,6 +263,7 @@ public class OrderController {
     }
 
     @GetMapping("/history/{userId}")
+    @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<ApiResponse> getOrdersByCurrentUserId(@PathVariable Integer userId, HttpServletRequest request) {
         try {
             if (userService.getUserById(userId) == null) {
@@ -299,6 +300,7 @@ public class OrderController {
     }
 
     @GetMapping("/delivery/{id}")
+    @PreAuthorize("hasRole('ROLE_Delivery Staff')")
     public ResponseEntity<ApiResponse> getOrdersByDeliveryStaffId(@PathVariable Integer id) {
         try {
             List<Order> orders = orderService.getOrdersByDeliveryStaffId(id);
@@ -317,6 +319,7 @@ public class OrderController {
     }
 
     @PutMapping("/assign")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> assignOrder(@RequestBody DeliveryDTO deliveryDTO) {
         try {
             Order existingOrder = orderService.getOrderId(deliveryDTO.getOrderId());
@@ -357,6 +360,7 @@ public class OrderController {
     }
 
     @PutMapping("/delivery/status")
+    @PreAuthorize("hasRole('ROLE_Delivery Staff')")
     public ResponseEntity<ApiResponse> updateOrderStatusByDelivery(@RequestBody UpdateOrderStatusDTO updateOrderStatusDTO) {
         try {
             Order existingOrder = orderService.getOrderId(updateOrderStatusDTO.getOrderId());
@@ -402,6 +406,7 @@ public class OrderController {
     }
 
     @PutMapping("/cancel/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> cancelOrder(@PathVariable int id) {
         try {
             Order order = orderService.getOrderId(id);

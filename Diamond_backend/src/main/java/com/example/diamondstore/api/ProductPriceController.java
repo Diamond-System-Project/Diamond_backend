@@ -11,6 +11,7 @@ import com.example.diamondstore.services.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ProductPriceController {
     private ProductService productService;
 
     @GetMapping("/allproductprice")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllProductPrice() throws Exception {
         List<ProductPrice> list = productPriceService.productPriceList();
         if(list.isEmpty()){
@@ -42,6 +44,7 @@ public class ProductPriceController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getProductPriceId(@PathVariable int id) throws Exception {
         ProductPrice productPrice = productPriceService.getProductPriceById(id);
         if(productPrice != null){
@@ -59,6 +62,7 @@ public class ProductPriceController {
     }
 
     @GetMapping("/product/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getListByProductId(@PathVariable int id) throws Exception {
         List<ProductPrice> list = productPriceService.getProductPriceListByProductId(id);
         if(list.isEmpty()){
@@ -76,6 +80,7 @@ public class ProductPriceController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createProductPrice(@RequestBody ProductPriceDTO productPriceDTO) throws Exception {
         try{
             if(productService.getProductById(productPriceDTO.getProductId()) == null){
@@ -102,6 +107,7 @@ public class ProductPriceController {
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> deleteProductPrices(@RequestBody ProductPriceIdsDTO productPriceIdsDTO) {
         List<Integer> productPriceIds = productPriceIdsDTO.getProductPriceIds();
         try{

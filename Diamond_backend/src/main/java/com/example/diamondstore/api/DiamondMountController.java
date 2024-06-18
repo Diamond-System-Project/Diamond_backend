@@ -9,6 +9,7 @@ import com.example.diamondstore.services.interfaces.DiamondMountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class DiamondMountController {
     private DiamondMountService diamondMountService;
 
     @GetMapping("/allmount")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getAllMount() throws Exception {
         List<DiamondMount> mountList = diamondMountService.MountList();
         if(mountList.isEmpty()){
@@ -39,6 +41,7 @@ public class DiamondMountController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getMountId(@PathVariable int id) throws Exception {
         DiamondMount mount = diamondMountService.getMountById(id);
         if(mount != null){
@@ -56,6 +59,7 @@ public class DiamondMountController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createMount(@RequestBody MountDTO mountDTO) throws Exception {
         try{
             DiamondMount mount = diamondMountService.createDiamondMount(mountDTO.getMountName(), mountDTO.getSize(), mountDTO.getType(), mountDTO.getMaterial(), mountDTO.getBasePrice());
@@ -74,6 +78,7 @@ public class DiamondMountController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateMount(@RequestBody MountDTO mountDTO, @PathVariable int id) throws Exception {
         try{
             if(diamondMountService.getMountById(id) == null){
@@ -98,6 +103,7 @@ public class DiamondMountController {
     }
 
     @GetMapping("/list/{type}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getDiamondMountsByType(@PathVariable String type) throws Exception {
         List<DiamondMount> list = diamondMountService.getDiamondMountsByType(type);
         if(list.isEmpty()){
@@ -115,6 +121,7 @@ public class DiamondMountController {
     }
 
     @GetMapping("/type")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getListMountType() throws Exception {
         List<String> type = diamondMountService.getListMountType();
         if(type.isEmpty()){

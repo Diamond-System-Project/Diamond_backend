@@ -109,8 +109,10 @@ public class WarrantyServiceImpl implements WarrantyService {
     }
 
     @Override
-    public List<Warranty> searchWarrantyByOrderDetailId(Integer id) {
-        return warrantyRepository.findByOrderDetailId(orderDetailRepository.findByOrderDetailId(id));
+    public List<Warranty> getWarrantyByOrderDetailId(Integer orderDetailId) { //
+        OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
+                .orElseThrow(() -> new IllegalArgumentException("OrderDetail not found"));
+        return warrantyRepository.findByOrderDetailId(orderDetail);
     }
 
     // Hàm updateStatus để tự động cập nhật trạng thái

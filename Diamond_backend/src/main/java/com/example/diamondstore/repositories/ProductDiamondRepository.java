@@ -13,5 +13,6 @@ public interface ProductDiamondRepository extends JpaRepository<ProductDiamond, 
     ProductDiamond findProductDiamondByProductDiamondId(int id);
     ProductDiamond findProductDiamondByProductIdAndDiamondId(Product productId, Diamond diamondId);
     List<ProductDiamond> findByProductId(Product productId);
+    List<ProductDiamond> findByProductIdAndType(Product productId, String type);
 }
 

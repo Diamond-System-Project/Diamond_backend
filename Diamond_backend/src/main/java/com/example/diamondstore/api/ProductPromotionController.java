@@ -11,6 +11,7 @@ import com.example.diamondstore.services.interfaces.PromotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class ProductPromotionController {
     private PromotionService promotionService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllProductPromotion() throws Exception {
         List<ProductPromotion> list = productPromotionService.productPromotionList();
         if(list.isEmpty()){
@@ -44,6 +46,7 @@ public class ProductPromotionController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getProductPromotionId(@PathVariable int id) throws Exception {
         ProductPromotion productPromotion = productPromotionService.getProductPromotionById(id);
         if(productPromotion != null){
@@ -61,6 +64,7 @@ public class ProductPromotionController {
     }
 
     @GetMapping("/product/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getListByProductId(@PathVariable int id) throws Exception {
         List<ProductPromotion> list = productPromotionService.getListByProductId(id);
         if(list.isEmpty()){
@@ -78,6 +82,7 @@ public class ProductPromotionController {
     }
 
     @GetMapping("/promotion/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getListByPromotionId(@PathVariable int id) throws Exception {
         List<ProductPromotion> list = productPromotionService.getListByPromotionId(id);
         if(list.isEmpty()){
@@ -95,6 +100,7 @@ public class ProductPromotionController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createProductPromotions(@RequestBody ProductPromotionDTO productPromotionDTO) throws Exception {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());
@@ -150,6 +156,7 @@ public class ProductPromotionController {
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> deleteProductPromotions(@RequestBody ProductPromotionIdsDTO productPromotionIdsDTO) {
         List<Integer> productPromotionIds = productPromotionIdsDTO.getProductPriceIds();
         try{
@@ -175,6 +182,7 @@ public class ProductPromotionController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateProductPromotions(@RequestBody ProductPromotionDTO productPromotionDTO) throws Exception {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());
@@ -230,6 +238,7 @@ public class ProductPromotionController {
     }
 
     @PutMapping("/status")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> changeProductPromotionsStatus(@RequestBody ProductPromotionDTO productPromotionDTO) throws Exception {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());

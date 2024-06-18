@@ -26,9 +26,6 @@ public class Product {
     @Column(name = "productname")
     private String productName;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(name = "description", nullable = false)
     private String description;
 
@@ -71,4 +68,8 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Inventory> inventories;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Collection<Image> images;
 }
