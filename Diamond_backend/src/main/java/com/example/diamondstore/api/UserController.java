@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -241,6 +242,35 @@ public class UserController {
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(false)
                     .message("Invalid Authorization header.")
+                    .build());
+        }
+    }
+
+    @GetMapping("/role/{roleId}")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Admin')")
+    public ResponseEntity<ApiResponse> getUserListByRoleId(@PathVariable int roleId, @RequestHeader("Authorization") String authorizationHeader) throws Exception {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            User user = userService.getUserById(jwtUtil.extractUserId(token));
+            if(user.getRoleid().getRoleid() == 2 && (roleId == 2 || roleId == 1)){
+                return ResponseEntity.ok(ApiResponse.builder()
+                        .success(false)
+                        .message("Manager can not view other Managers or Admins")
+                        .build());
+            }
+        }
+
+        List<User> list = userService.getUserListByRoleId(roleId);
+        if(!list.isEmpty()){
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("Get Users By Role Success")
+                    .data(list)
+                    .build());
+        }else{
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(false)
+                    .message("Get Users By Role Fail")
                     .build());
         }
     }

@@ -25,4 +25,5 @@ public interface UserService {
     String forgotPass(String email);
     String resetPass(String token, PasswordResetDTO passwordResetDTO);
     String changePassword(int userId, PasswordResetDTO passwordResetDTO);
+    List<User> getUserListByRoleId(int roleId);
 }

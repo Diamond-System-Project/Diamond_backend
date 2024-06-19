@@ -170,6 +170,11 @@ public class UserServiceImpl implements UserService {
         return "Your password has been successfully updated.";
     }
 
+    @Override
+    public List<User> getUserListByRoleId(int roleId) {
+        return userRepository.findUsersByRoleid(roleRepository.findRoleByRoleid(roleId));
+    }
+
 
     private String generateToken() {
         StringBuilder token = new StringBuilder();

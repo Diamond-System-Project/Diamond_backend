@@ -54,6 +54,8 @@ public class SecurityConfig {
 
                         //.requestMatchers("/api/mount/allmount").hasRole("Sales Staff")
 
+                        .requestMatchers("/api/user/role/*").hasAnyRole("Manager", "Admin")
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
