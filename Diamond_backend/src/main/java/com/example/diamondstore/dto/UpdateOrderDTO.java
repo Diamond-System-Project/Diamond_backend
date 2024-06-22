@@ -11,13 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class UpdateOrderDTO {
-
     private String cname;
     private String address;
     private String email;
     private String phone;
     private String payment_method;
-
-
-
 }

@@ -9,6 +9,7 @@ import com.example.diamondstore.response.ApiResponse;
 import com.example.diamondstore.services.interfaces.VoucherTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class VoucherTypeController {
     private VoucherTypeService voucherTypeService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllVoucherType() throws Exception {
         List<VoucherType> list = voucherTypeService.voucherTypeList();
         if(list.isEmpty()){
@@ -54,6 +56,7 @@ public class VoucherTypeController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createVoucherType(@RequestBody VoucherTypeDTO voucherTypeDTO) throws Exception {
         try{
             VoucherType voucherType = voucherTypeService.createVoucherType(voucherTypeDTO);
@@ -72,6 +75,7 @@ public class VoucherTypeController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> updateVoucherType(@RequestBody VoucherTypeDTO voucherTypeDTO, @PathVariable int id) throws Exception {
         try{
             if(voucherTypeService.getVoucherTypeById(id) == null){

@@ -21,7 +21,7 @@ public class PromotionController {
     @Autowired
     private PromotionService promotionService;
 
-    @GetMapping("/allpromotion")
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllPromotion() throws Exception {
         List<Promotion> list = promotionService.promotionList();

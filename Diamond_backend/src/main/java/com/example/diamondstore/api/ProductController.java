@@ -28,7 +28,7 @@ public class ProductController {
     @Autowired
     private ProductPriceService productPriceService;
 
-    @GetMapping("/allproduct")
+    @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllProduct() throws Exception {
         List<Product> productList = productService.productList();
         if(productList.isEmpty()){
@@ -49,7 +49,6 @@ public class ProductController {
     }
 
     @GetMapping("/showProduct/{id}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getProductId(@PathVariable int id) throws Exception {
         Product product = productService.getProductById(id);
         if(product != null){
@@ -143,7 +142,6 @@ public class ProductController {
     }
 
     @GetMapping("/list/{type}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getProductsByMountType(@PathVariable String type) throws Exception {
         try {
             List<Product> list = productService.getProductsByMountType(type);

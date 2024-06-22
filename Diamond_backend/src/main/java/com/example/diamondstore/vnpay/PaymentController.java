@@ -34,6 +34,7 @@ public class PaymentController {
         if (status.equals("00")) {
             Order order = orderRepository.findByOrderId(orderId);
             order.setPayment_date(Date.from(Instant.now()));
+            order.setPaymentStatus(true);
             orderRepository.save(order);
             return new ResponseObject<>(HttpStatus.OK, "Success", new PaymentDTO.VNPayResponse("00", "Success", "DCM KHO VAI LOL"));
         } else {

@@ -21,8 +21,8 @@ public class DiamondController {
     @Autowired
     private DiamondService diamondService;
 
-    @GetMapping("/alldiamond")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getAllDiamond() throws Exception {
         List<Diamond> diamondList = diamondService.DiamondList();
         if(diamondList.isEmpty()){
@@ -40,7 +40,7 @@ public class DiamondController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getDiamondId(@PathVariable int id) throws Exception {
         Diamond diamond = diamondService.getDiamondById(id);
         if(diamond != null){

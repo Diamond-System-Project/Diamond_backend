@@ -63,7 +63,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/alluser")
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllUser() throws Exception {
         List<User> userList = userService.userList();
         if(userList.isEmpty()){
@@ -97,6 +98,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<ApiResponse> updateUser(@PathVariable int id, @RequestBody UpdateUser updateUser, HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -132,6 +134,7 @@ public class UserController {
     }
 
     @PutMapping("/status/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> changeStatusUserByUserid(@PathVariable int id, @RequestBody Map<String, String> status) throws Exception {
         if(!userService.getUserId(id).isPresent()){
             return ResponseEntity.ok(ApiResponse.builder()
@@ -182,6 +185,7 @@ public class UserController {
     }
 
     @PutMapping("/change-password/{id}")
+    @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<ApiResponse> changePass(@PathVariable int id, @RequestBody PasswordResetDTO passwordResetDTO, HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {

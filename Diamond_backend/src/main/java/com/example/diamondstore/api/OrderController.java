@@ -121,7 +121,6 @@ public class OrderController {
 
 
     @GetMapping("/{orderId}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getOrderId(@PathVariable Integer orderId) {
         try {
             Order order = orderService.getOrderId(orderId);
@@ -147,6 +146,7 @@ public class OrderController {
         }
     }
 
+    //ko gắn
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
         try {
@@ -173,7 +173,7 @@ public class OrderController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getAllOrders() {
         try {
             List<Order> orders = orderService.getAllOrder();
@@ -219,6 +219,7 @@ public class OrderController {
         }
     }
 
+    //khoan gắn
     @DeleteMapping("/delete/{orderId}")
     public ResponseEntity<ApiResponse> deleteOrder(@PathVariable int orderId) {
         try {
@@ -237,7 +238,7 @@ public class OrderController {
     }
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getOrdersByUserId(@PathVariable Integer userId) {
         try {
             if (userService.getUserById(userId) == null) {
@@ -361,9 +362,20 @@ public class OrderController {
 
     @PutMapping("/delivery/status")
     @PreAuthorize("hasRole('ROLE_Delivery Staff')")
-    public ResponseEntity<ApiResponse> updateOrderStatusByDelivery(@RequestBody UpdateOrderStatusDTO updateOrderStatusDTO) {
+    public ResponseEntity<ApiResponse> updateOrderStatusByDelivery(@RequestBody UpdateOrderStatusDTO updateOrderStatusDTO, HttpServletRequest request) {
         try {
             Order existingOrder = orderService.getOrderId(updateOrderStatusDTO.getOrderId());
+            String authorizationHeader = request.getHeader("Authorization");
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                String token = authorizationHeader.substring(7);
+                int userId = jwtUtil.extractUserId(token);
+                if(userId != existingOrder.getDeliveryStaff().getUserId()){
+                    return ResponseEntity.ok(ApiResponse.builder()
+                            .success(false)
+                            .message("Does not have permission to update this order!")
+                            .build());
+                }
+            }
             if (existingOrder == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         ApiResponse.builder()
@@ -407,7 +419,7 @@ public class OrderController {
 
     @PutMapping("/cancel/{id}")
     @PreAuthorize("hasRole('ROLE_Manager')")
-    public ResponseEntity<ApiResponse> cancelOrder(@PathVariable int id) {
+    public ResponseEntity<ApiResponse> cancelOrder(@PathVariable int id, @RequestBody CancelOrderDTO cancelOrderDTO) {
         try {
             Order order = orderService.getOrderId(id);
             if (order == null) {
@@ -422,8 +434,14 @@ public class OrderController {
                                 .success(false)
                                 .message("Order has been Delivered or Cancelled!")
                                 .build());
+            } else if (cancelOrderDTO.getReason().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        ApiResponse.builder()
+                                .success(false)
+                                .message("Reason can not be empty!")
+                                .build());
             } else {
-                Order cancelOrder = orderService.cancelOrder(id);
+                Order cancelOrder = orderService.cancelOrder(id, cancelOrderDTO);
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(true)
                         .message("Cancel Order Successfully")

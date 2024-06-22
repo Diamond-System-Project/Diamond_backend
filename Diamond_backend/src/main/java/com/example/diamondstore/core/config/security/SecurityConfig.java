@@ -31,30 +31,39 @@ public class SecurityConfig {
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // Add the CorsFilter before other filters
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/*/*/login", "/*/*/logout", "/*/*/register", "/*/*/payment/*",
-                                "/*/*/forgot-password", "/*/*/reset-password",
-                                "/*/*/createWithDetails", "/*/comment/product/*",
-                                "/*/*/allproduct", "/*/product/search/*").permitAll() // Permit access to /login endpoint
+                                "/*/*/forgot-password", "/*/*/reset-password", "/*/product/list/*",
+                                "/*/*/createWithDetails", "/*/comment/product/*", "/api/order/*",
+                                "/*/product/all", "/*/*/showProduct/*", "/*/product/search/*").permitAll() // Permit access to /login endpoint
 
                         .requestMatchers("/api/comment/add", "/api/comment/edit/*", "/api/order/createWithDetails",
-                                "/api/order/update", "/api/order_detail/create",
-                                "/api/order_detail/update", "/*/order/history/*").hasRole("Member") //Comment
+                                "/api/order_detail/create", "/api/order_detail/*", "/api/order_detail/update/*",
+                                "/*/order/history/*", "/api/user/update/*", "/api/user/change-password/*",
+                                "/api/voucher/create/*").hasRole("Member")
 
-                        .requestMatchers("/api/certificate/*", "/api/diamond/*",
-                                "/api/inventory/*", "/api/promotion/*", "/api/order_detail/orderDetail",
-                                "/api/order_detail/all", "/api/order_detail/order", "/*/order/assign",
-                                "/api/productdiamond/*", "/api/productprice/*", "/api/productpromotion/*",
-                                "/api/order/update" ,"/api/order/update/user", "/*/order/cancel/*",
-                                "/api/product/showProduct/*","/api/product/create",
-                                "/api/product/update", "/api/product/showProduct/list" ).hasRole("Manager")
+                        .requestMatchers("/api/certificate/create", "/api/certificate/all", "/api/certificate/delete/*",
+                                "/api/certificate/update/*", "api/comment/user/*", "api/comment/user/*/product/*",
+                                "/api/diamond/create", "/api/diamond/update/*", "/api/mount/create", "/api/mount/update/*",
+                                "/api/mount/list/*", "/api/mount/type", "/api/inventory/all", "/api/inventory/create",
+                                "/api/inventory/*", "/api/inventory/update/*", "/api/inventory/delete/*", "/api/promotion/*",
+                                "/api/order_detail/orderDetail/*", "/api/order_detail/list/all", "/api/order_detail/order/*",
+                                "/*/order/assign", "/api/productdiamond/update/*", "/api/productprice/product/*", "/api/productdiamond/*",
+                                "/api/productprice/*", "/api/productpromotion/*", "/api/productpromotion/product/*", "/*/order/cancel/*",
+                                "/api/productpromotion/promotion/*", "/api/promotion/*", "/api/promotion/update/*",
+                                "/api/promotion/status/*", "/api/product/create","/api/product/update/*", "/api/user/all",
+                                "/api/user/status/*", "/api/voucher/all", "/api/vouchertype/all","/api/vouchertype/create",
+                                "/api/vouchertype/update/*", "/api/warranty/delete/*").hasRole("Manager")
 
                         .requestMatchers("/api/order/delivery/*", "/api/order/delivery/status" ).hasRole("Delivery Staff")
 
-                        .requestMatchers("/api/mount/allmount").hasAnyRole("Sales Staff", "Manager")
-                        //cái nào có nhiều role truy cập thì ghi hasAnyRole, không chia hasRole như bên dưới
-
-                        //.requestMatchers("/api/mount/allmount").hasRole("Sales Staff")
+                        .requestMatchers("/api/diamond/all", "/api/mount/all", "/api/diamond/*",
+                                "/api/mount/*", "/api/order/all", "/api/order/user/*", "/api/warranty/create",
+                                "/api/warranty/update/*", "/api/warranty/all",
+                                "/api/warranty/orderDetail/*").hasAnyRole("Sales Staff", "Manager")
 
                         .requestMatchers("/api/user/role/*").hasAnyRole("Manager", "Admin")
+
+                        .requestMatchers("/api/comment/delete/*", "/api/order/update/*",
+                                "/api/voucher/member/*").hasAnyRole("Member", "Manager")
 
                         .anyRequest().authenticated()
                 )

@@ -25,7 +25,7 @@ public class ProductPriceController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/allproductprice")
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllProductPrice() throws Exception {
         List<ProductPrice> list = productPriceService.productPriceList();

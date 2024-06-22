@@ -22,7 +22,7 @@ public class DiamondMountController {
     @Autowired
     private DiamondMountService diamondMountService;
 
-    @GetMapping("/allmount")
+    @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getAllMount() throws Exception {
         List<DiamondMount> mountList = diamondMountService.MountList();
@@ -41,7 +41,7 @@ public class DiamondMountController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getMountId(@PathVariable int id) throws Exception {
         DiamondMount mount = diamondMountService.getMountById(id);
         if(mount != null){

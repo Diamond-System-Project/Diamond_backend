@@ -20,5 +20,5 @@ public interface OrderService {
     List<Order> getOrdersByDeliveryStaffId(Integer deliveryId);
     Order assignOrderToDelivery(DeliveryDTO deliveryDTO);
     Order updateOrderStatusByDelivery(UpdateOrderStatusDTO updateOrderStatusDTO);
-    Order cancelOrder(int orderId);
+    Order cancelOrder(int orderId, CancelOrderDTO cancelOrderDTO);
 }

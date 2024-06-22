@@ -24,6 +24,7 @@ public class OrderDetailController {
     @Autowired
     private OrderDetailService orderDetailService;
 
+    //khoan gắn
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createOrderDetail(@RequestBody OrderDetailDTO orderDetailDTO) {
         try {
@@ -73,6 +74,7 @@ public class OrderDetailController {
 
 
     @DeleteMapping("/{orderDetailId}")
+    @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<ApiResponse> deleteOrderDetail(@PathVariable Integer orderDetailId) {
         try {
             orderDetailService.deleteOrderDetail(orderDetailId);
@@ -126,7 +128,7 @@ public class OrderDetailController {
     }
 
 
-    @GetMapping("/all")
+    @GetMapping("/list/all")
     @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllOrderDetails() {
         try {

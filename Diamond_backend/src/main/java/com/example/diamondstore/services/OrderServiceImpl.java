@@ -44,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(createOrderRequestDTO.getOrder().getAddress());
         order.setPayment_method(createOrderRequestDTO.getOrder().getPayment_method());
         order.setStatus("Pending");
+        order.setPaymentStatus(false);
         if(userId != null){
             User user = userRepository.findUserByUserId(userId);
             order.setCid(user);
@@ -165,6 +166,10 @@ public class OrderServiceImpl implements OrderService {
         if(updateOrderStatusDTO.getStatus().equals("Delivered")){
             order.setStatus(updateOrderStatusDTO.getStatus());
             order.setDelivery(Date.from(Instant.now()));
+            if(order.getPayment_method().equals("COD")){
+                order.setPayment_date(Date.from(Instant.now()));
+                order.setPaymentStatus(true);
+            }
             if(order.getCid() != null){
                 User user = order.getCid();
                 userRepository.updatePointByUserId(user.getPoint() + Math.round(order.getPayment()/10000), user.getUserId());
@@ -175,9 +180,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order cancelOrder(int orderId) {
+    public Order cancelOrder(int orderId, CancelOrderDTO cancelOrderDTO) {
         Order order = orderRepository.findByOrderId(orderId);
         order.setStatus("Cancelled");
+        order.setCancelReason(cancelOrderDTO.getReason());
 
         List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(order);
         for (OrderDetail orderDetail : orderDetails) {

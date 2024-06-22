@@ -30,7 +30,7 @@ public class ProductDiamondController {
     @Autowired
     private DiamondService diamondService;
 
-    @GetMapping("/allproductdiamond")
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getAllProductDiamond() throws Exception {
         List<ProductDiamond> productDiamondList = productDiamondService.productDiamondList();

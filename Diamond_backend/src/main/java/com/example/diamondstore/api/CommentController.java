@@ -24,7 +24,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @PutMapping("/{commentId}")
+    @PutMapping("/edit/{commentId}")
     @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<?> editComment(
             @PathVariable int commentId,
@@ -66,7 +66,8 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/delete/{commentId}")
+    @PreAuthorize("hasAnyRole('ROLE_Member', 'ROLE_Manager')")
     public ResponseEntity<?> deleteComment(
             @PathVariable int commentId,
             Authentication authentication
@@ -95,12 +96,14 @@ public class CommentController {
     }
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<List<Comment>> getAllCommentsByUserId(@PathVariable Integer userId) {
         List<Comment> comments = commentService.getAllCommentsByUserId(userId);
         return ResponseEntity.ok(comments);
     }
 
     @GetMapping("/user/{userId}/product/{productId}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<List<Comment>> getAllCommentsByUserIdAndProductId(@PathVariable Integer userId, @PathVariable Integer productId) {
         List<Comment> comments = commentService.getAllCommentsByUserIdAndProductId(userId, productId);
         return ResponseEntity.ok(comments);

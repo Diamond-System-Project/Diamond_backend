@@ -22,7 +22,7 @@ public class WarrantyController {
     private WarrantyService warrantyService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> addWarranty(@RequestBody WarrantyDTO warrantyDTO) {
         try {
             if (warrantyDTO.getStartDate().isAfter(warrantyDTO.getEndDate())) {
@@ -57,7 +57,7 @@ public class WarrantyController {
     }
 
     @PutMapping("update/{warrantyId}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> updateWarranty(@PathVariable Integer warrantyId, @RequestBody WarrantyDTO warrantyDTO) {
         try {
             if (warrantyDTO.getStartDate().isAfter(warrantyDTO.getEndDate())) {
@@ -91,7 +91,7 @@ public class WarrantyController {
         }
     }
 
-    @DeleteMapping("/{warrantyId}")
+    @DeleteMapping("/delete/{warrantyId}")
     @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> deleteWarranty(@PathVariable Integer warrantyId) {
         try {
@@ -114,7 +114,7 @@ public class WarrantyController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> viewAllWarranty() {
         try {
             List<Warranty> warranties = warrantyService.viewAllWarranty();
@@ -132,7 +132,6 @@ public class WarrantyController {
     }
 
     @GetMapping("/{warrantyId}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> getWarrantyById(@PathVariable Integer warrantyId) {
         try {
             Warranty warranty = warrantyService.getWarrantyById(warrantyId);
@@ -155,7 +154,7 @@ public class WarrantyController {
     }
 
     @GetMapping("/orderDetail/{orderDetailId}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getWarrantyByOrderDetailId(@PathVariable Integer orderDetailId) {
         try {
             List<Warranty> warranties = warrantyService.getWarrantyByOrderDetailId(orderDetailId);

@@ -64,6 +64,9 @@ public class Order {
     @Column(name = "payment_amount")
     private float payment;
 
+    @Column(name = "payment_status")
+    private boolean paymentStatus;
+
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "payment_date")
@@ -80,6 +83,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "delivery_staffid")
     private User deliveryStaff;
+
+    @Column(name = "cancel_reason")
+    private String cancelReason;
 
     @PrePersist
     @PreUpdate
