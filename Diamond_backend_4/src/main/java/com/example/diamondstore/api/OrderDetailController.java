@@ -101,7 +101,7 @@ public class OrderDetailController {
 
 
     @GetMapping("orderDetail/{orderDetailId}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    //@PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Member', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getOrderDetailById(@PathVariable Integer orderDetailId) {
         try {
             OrderDetail orderDetail = orderDetailService.getOrderDetailById(orderDetailId);
@@ -150,7 +150,7 @@ public class OrderDetailController {
 
 
     @GetMapping("/order/{orderId}")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    //@PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Member', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getOrderDetailsByOrderId(@PathVariable Integer orderId) {
         try {
             List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrderId(orderId);

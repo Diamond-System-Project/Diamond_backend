@@ -11,5 +11,6 @@ public class UserToken {
     private int userId;
     private String email;
     private String fullName;
+    private int roleId;
     private String token;
 }

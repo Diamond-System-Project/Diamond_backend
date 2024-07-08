@@ -227,7 +227,7 @@ public class UserController {
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
                     .message("Login success!")
-                    .data(new UserToken(response.getUserId(), response.getEmail(), response.getFullName(), token))
+                    .data(new UserToken(response.getUserId(), response.getEmail(), response.getFullName(), response.getRoleId(), token))
                     .build());
         }
     }

@@ -11,4 +11,5 @@ public class UserLoginResponse {
     private int userId;
     private String fullName;
     private String email;
+    private int roleId;
 }

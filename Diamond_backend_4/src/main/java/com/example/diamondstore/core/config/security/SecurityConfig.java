@@ -35,7 +35,8 @@ public class SecurityConfig {
                                 "/*/*/forgot-password", "/*/*/reset-password", "/*/product/list/*",
                                 "/*/*/createWithDetails", "/*/comment/product/*", "/api/order/*",
                                 "/*/product/all", "/*/*/showProduct/*", "/*/product/search/*",
-                                "/*/*/list/prices").permitAll() // Permit access to /login endpoint
+                                "/*/*/list/prices", "/api/order_detail/orderDetail/*",
+                                "/api/order_detail/order/*").permitAll() // Permit access to /login endpoint
 
                         .requestMatchers("/api/comment/add", "/api/comment/edit/*", "/api/order/createWithDetails",
                                 "/api/order_detail/create", "/api/order_detail/*", "/api/order_detail/update/*",
@@ -47,7 +48,7 @@ public class SecurityConfig {
                                 "/api/diamond/create", "/api/diamond/update/*", "/api/mount/create", "/api/mount/update/*",
                                 "/api/mount/list/*", "/api/mount/type", "/api/inventory/all", "/api/inventory/create",
                                 "/api/inventory/*", "/api/inventory/update/*", "/api/inventory/delete/*", "/api/promotion/*",
-                                "/api/order_detail/orderDetail/*", "/api/order_detail/list/all", "/api/order_detail/order/*",
+                                "/api/order_detail/list/all",
                                 "/*/order/assign", "/api/productdiamond/update/*", "/api/productprice/product/*", "/api/productdiamond/*",
                                 "/api/productprice/*", "/api/productpromotion/*", "/api/productpromotion/product/*", "/*/order/cancel/*",
                                 "/api/productpromotion/promotion/*", "/api/promotion/*", "/api/promotion/update/*",
