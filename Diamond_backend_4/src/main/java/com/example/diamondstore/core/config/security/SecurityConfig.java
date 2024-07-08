@@ -36,7 +36,7 @@ public class SecurityConfig {
                                 "/*/*/createWithDetails", "/*/comment/product/*", "/api/order/*",
                                 "/*/product/all", "/*/*/showProduct/*", "/*/product/search/*",
                                 "/*/*/list/prices", "/api/order_detail/orderDetail/*",
-                                "/api/order_detail/order/*").permitAll() // Permit access to /login endpoint
+                                "/api/order_detail/order/*", "/api/warranty/orderDetail/*").permitAll() // Permit access to /login endpoint
 
                         .requestMatchers("/api/comment/add", "/api/comment/edit/*", "/api/order/createWithDetails",
                                 "/api/order_detail/create", "/api/order_detail/*", "/api/order_detail/update/*",
@@ -62,8 +62,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/diamond/all", "/api/mount/all", "/api/diamond/*",
                                 "/api/mount/*", "/api/order/all", "/api/warranty/create",
-                                "/api/warranty/update/*", "/api/warranty/all",
-                                "/api/warranty/orderDetail/*").hasAnyRole("Sales Staff", "Manager")
+                                "/api/warranty/update/*", "/api/warranty/all").hasAnyRole("Sales Staff", "Manager")
 
                         .requestMatchers("/api/user/role/*").hasAnyRole("Manager", "Admin")
 

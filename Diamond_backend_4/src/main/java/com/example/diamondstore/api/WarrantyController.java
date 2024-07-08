@@ -154,7 +154,7 @@ public class WarrantyController {
     }
 
     @GetMapping("/orderDetail/{orderDetailId}")
-    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
+    //@PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getWarrantyByOrderDetailId(@PathVariable Integer orderDetailId) {
         try {
             List<Warranty> warranties = warrantyService.getWarrantyByOrderDetailId(orderDetailId);
