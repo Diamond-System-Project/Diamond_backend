@@ -60,7 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/order/delivery/*", "/api/order/delivery/status" ).hasRole("Delivery Staff")
 
                         .requestMatchers("/api/diamond/all", "/api/mount/all", "/api/diamond/*",
-                                "/api/mount/*", "/api/order/all", "/api/order/user/*", "/api/warranty/create",
+                                "/api/mount/*", "/api/order/all", "/api/warranty/create",
                                 "/api/warranty/update/*", "/api/warranty/all",
                                 "/api/warranty/orderDetail/*").hasAnyRole("Sales Staff", "Manager")
 
@@ -68,6 +68,8 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/comment/delete/*", "/api/order/update/*",
                                 "/api/voucher/member/*").hasAnyRole("Member", "Manager")
+
+                        .requestMatchers("/api/order/user/*").hasAnyRole("Sales Staff", "Manager", "Member")
 
                         .requestMatchers("/api/dashboard/countMember", "/api/dashboard/countProcessingOrder",
                                 "/api/dashboard/countCompleteOrder", "/api/dashboard/countCancelOrder",

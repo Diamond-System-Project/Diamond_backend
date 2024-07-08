@@ -238,9 +238,10 @@ public class OrderController {
         }
     }
 
+    //hàm đã sửa
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
-    public ResponseEntity<ApiResponse> getOrdersByUserId(@PathVariable Integer userId) {
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff', 'ROLE_Member')")
+    public ResponseEntity<ApiResponse> getOrdersByUserId(@PathVariable Integer userId, HttpServletRequest request) {
         try {
             if (userService.getUserById(userId) == null) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
@@ -248,6 +249,18 @@ public class OrderController {
                                 .success(false)
                                 .message("User Not Found")
                                 .build());
+            }
+            String authorizationHeader = request.getHeader("Authorization");
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                String token = authorizationHeader.substring(7);
+                int currentUserId = jwtUtil.extractUserId(token);
+                User currentUser = userService.getUserById(currentUserId);
+                if (userId != currentUserId && currentUser.getRoleid().getRoleid() == 5) {
+                    return ResponseEntity.ok(ApiResponse.builder()
+                            .success(false)
+                            .message("Does not have permission to view list orders of this user!")
+                            .build());
+                }
             }
             List<Order> orders = orderService.getOrdersByUserId(userId);
             return ResponseEntity.ok(ApiResponse.builder()
