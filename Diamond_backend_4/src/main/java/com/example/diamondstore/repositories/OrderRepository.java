@@ -19,6 +19,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findByDeliveryStaff(User delivery);
 
+    List<Order> findByStatus(String status);
+
     @Query("SELECT COUNT(o) FROM Order o WHERE o.status NOT IN ('Cancelled', 'Delivered')")
     int countProcessingOrder(); // Ngoai tru cac status la Cancel, Deliver thi dem het
 

@@ -6,6 +6,7 @@ import com.example.diamondstore.response.ApiResponse;
 import com.example.diamondstore.services.interfaces.*;
 import com.example.diamondstore.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -357,7 +358,14 @@ public class OrderController {
                                 .success(false)
                                 .message("Assign failed: Can't change status of this Order")
                                 .build());
-            } else {
+            }
+            else if (existingOrder.getDeliveryStaff() != null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        ApiResponse.builder()
+                                .success(false)
+                                .message("Assign failed: Order Already Assigned!")
+                                .build());
+            }else {
                 Order assignOrder = orderService.assignOrderToDelivery(deliveryDTO);
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(true)
@@ -494,6 +502,67 @@ public class OrderController {
                     ApiResponse.builder()
                             .success(false)
                             .message("Failed to get order: " + e.getMessage())
+                            .build());
+        }
+    }
+
+    @GetMapping("/status/list")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff', 'ROLE_Delivery Staff')")
+    public ResponseEntity<ApiResponse> getListOrdersByStatus(@RequestBody OrderStatusDTO orderStatusDTO) {
+        try {
+            List<Order> list = orderService.getListOrdersByStatus(orderStatusDTO);
+            if (!list.isEmpty()) {
+                return ResponseEntity.ok(ApiResponse.builder()
+                        .success(true)
+                        .message("Get List Orders By Status Successfully!")
+                        .data(list)
+                        .build());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        ApiResponse.builder()
+                                .success(false)
+                                .message("List is empty!")
+                                .build());
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    ApiResponse.builder()
+                            .success(false)
+                            .message("Failed to get orders: " + e.getMessage())
+                            .build());
+        }
+    }
+
+    @PutMapping("/processing/{id}")
+    @PreAuthorize("hasRole('ROLE_Manager')")
+    public ResponseEntity<ApiResponse> updateOrderToProcessing(@PathVariable int id) {
+        try {
+            Order order = orderService.getOrderId(id);
+            if (order == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        ApiResponse.builder()
+                                .success(false)
+                                .message("Cancel failed: Can't find this order")
+                                .build());
+            } else if (!order.getStatus().equals("Pending")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        ApiResponse.builder()
+                                .success(false)
+                                .message("Order has already been Processing!")
+                                .build());
+            } else {
+                Order updateOrder = orderService.updateOrderToProcessing(id);
+                return ResponseEntity.ok(ApiResponse.builder()
+                        .success(true)
+                        .message("Update Order Successfully")
+                        .data(updateOrder)
+                        .build());
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    ApiResponse.builder()
+                            .success(false)
+                            .message("Update failed: " + e.getMessage())
                             .build());
         }
     }

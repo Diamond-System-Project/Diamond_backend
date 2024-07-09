@@ -49,7 +49,12 @@ public class ProductPriceServiceImpl implements ProductPriceService {
                 .updateDate(Date.from(Instant.now()))
                 .build());
 
-        product.setPrice(saveProductPrice.getSellingPrice());
+        BigDecimal originalPrice = saveProductPrice.getSellingPrice();
+        BigDecimal roundedPrice = originalPrice.divide(new BigDecimal("10000"), 0, RoundingMode.UP)
+                .multiply(new BigDecimal("10000"))
+                .setScale(0, RoundingMode.HALF_UP);
+        product.setPrice(roundedPrice);
+
         productRepository.save(product);
         return saveProductPrice;
     }
@@ -71,7 +76,12 @@ public class ProductPriceServiceImpl implements ProductPriceService {
                     .updateDate(Date.from(Instant.now()))
                     .build());
 
-            product.setPrice(saveProductPrice.getSellingPrice().setScale(2, RoundingMode.HALF_UP));
+            BigDecimal originalPrice = saveProductPrice.getSellingPrice();
+            BigDecimal roundedPrice = originalPrice.divide(new BigDecimal("10000"), 0, RoundingMode.UP)
+                    .multiply(new BigDecimal("10000"))
+                    .setScale(0, RoundingMode.HALF_UP);
+            product.setPrice(roundedPrice);
+
             productRepository.save(product);
         }
     }

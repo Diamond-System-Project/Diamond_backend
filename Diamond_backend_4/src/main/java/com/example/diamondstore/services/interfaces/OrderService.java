@@ -22,4 +22,6 @@ public interface OrderService {
     Order updateOrderStatusByDelivery(UpdateOrderStatusDTO updateOrderStatusDTO);
     Order cancelOrder(int orderId, CancelOrderDTO cancelOrderDTO);
     List<DeliveryShippingOrderCountDTO> getDeliveryShippingOrderNumber();
+    List<Order> getListOrdersByStatus(OrderStatusDTO orderStatusDTO);
+    Order updateOrderToProcessing(Integer orderId);
 }

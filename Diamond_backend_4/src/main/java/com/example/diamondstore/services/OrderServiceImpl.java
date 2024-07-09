@@ -160,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
     public Order assignOrderToDelivery(DeliveryDTO deliveryDTO) {
         Order order = orderRepository.findByOrderId(deliveryDTO.getOrderId());
         order.setDeliveryStaff(userRepository.findUserByUserId(deliveryDTO.getDeliveryId()));
-        order.setStatus("Processing");
+        //order.setStatus("Processing");
         return orderRepository.save(order);
     }
 
@@ -219,5 +219,17 @@ public class OrderServiceImpl implements OrderService {
             list.add(dto);
         }
         return list;
+    }
+
+    @Override
+    public List<Order> getListOrdersByStatus(OrderStatusDTO orderStatusDTO) {
+        return orderRepository.findByStatus(orderStatusDTO.getStatus());
+    }
+
+    @Override
+    public Order updateOrderToProcessing(Integer orderId) {
+        Order order = orderRepository.findByOrderId(orderId);
+        order.setStatus("Processing");
+        return orderRepository.save(order);
     }
 }
