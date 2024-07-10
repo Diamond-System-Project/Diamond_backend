@@ -48,7 +48,7 @@ public class UserController {
                         .message("Create user fail! Email or PhoneNumber wrong format!")
                         .build());
             } else {
-                User user = userService.register(createUser.getFullName(), createUser.getEmail(), createUser.getPassword(), createUser.getPhone(), createUser.getGender(), createUser.getDob());
+                User user = userService.register(createUser.getFullName(), createUser.getEmail(), createUser.getPassword(), createUser.getPhone(), createUser.getGender(), createUser.getDob(), createUser.getAddress());
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(true)
                         .message("Create user success!")

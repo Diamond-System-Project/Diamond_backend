@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private static final long EXPIRE_TOKEN=30;
 
     @Override
-    public User register(String fullName, String email, String password, String phone, String gender, Date dob) {
+    public User register(String fullName, String email, String password, String phone, String gender, Date dob, String address) {
         User saveUser = userRepository.save(User.builder()
                 .fullName(fullName)
                 .email(email)
@@ -40,11 +40,13 @@ public class UserServiceImpl implements UserService {
                 .phone(phone)
                 .gender(gender)
                 .dob(dob)
+                        .address(address)
                 .roleid(roleRepository.findRoleByRoleid(5))
                 .status("active")
                 .point(0)
                 .typeLogin("system account")
                 .createAt(Date.from(Instant.now()))
+
                 .build());
         return saveUser;
     }

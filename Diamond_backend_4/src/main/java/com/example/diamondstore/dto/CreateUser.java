@@ -18,6 +18,7 @@ public class CreateUser {
     private String password;
     private String phone;
     private String gender;
+    private String address;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE)

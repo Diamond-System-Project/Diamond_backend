@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public interface UserService {
     boolean isEmailDuplicated(String email);
-    User register(String fullName, String email, String password, String phone, String gender, Date dob);
+    User register(String fullName, String email, String password, String phone, String gender, Date dob, String address);
     UserLoginResponse login(String username, String password);
     Optional<User> getUserId(int userid);
     User getUserById(int userid);
