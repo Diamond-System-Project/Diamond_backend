@@ -73,6 +73,9 @@ public class User {
     @Column(name = "token_create_date")
     private Date tokenCreateDate;
 
+    @Column(name = "address")
+    private String address;
+
     @JsonIgnore
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Comment> comments;

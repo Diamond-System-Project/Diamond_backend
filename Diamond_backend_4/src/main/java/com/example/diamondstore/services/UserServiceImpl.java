@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
         if(loginUser == null || !bCryptPasswordEncoder.matches(password,userRepository.findUserByEmail(email).getPassword())){
             return null;
         }else{
-            return new UserLoginResponse(loginUser.getUserId(), loginUser.getFullName(), loginUser.getEmail(), loginUser.getRoleid().getRoleid());
+            return new UserLoginResponse(loginUser.getUserId(), loginUser.getFullName(), loginUser.getEmail(), loginUser.getRoleid().getRoleid(), loginUser.getAddress(), loginUser.getPhone());
         }
     }
 

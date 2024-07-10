@@ -12,4 +12,6 @@ public class UserLoginResponse {
     private String fullName;
     private String email;
     private int roleId;
+    private String address;
+    private String phone;
 }
