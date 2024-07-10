@@ -36,6 +36,7 @@ public class CollectionServiceImpl implements CollectionService {
         Collection collection = Collection.builder()
                 .collectionName(collectionDTO.getName())
                 .description(collectionDTO.getDescription())
+                .url(collectionDTO.getUrl())
                 .build();
         return collectionRepository.save(collection);
     }
@@ -108,6 +109,7 @@ public class CollectionServiceImpl implements CollectionService {
         }
         collection.setCollectionName(collectionDTO.getName());
         collection.setDescription(collectionDTO.getDescription());
+        collection.setUrl(collection.getUrl());
 
         return collectionRepository.save(collection);
     }

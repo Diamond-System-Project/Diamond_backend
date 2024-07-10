@@ -14,4 +14,5 @@ public class CollectionDTO {
     private String name;
     @NotEmpty(message = "Description cannot be empty")
     private String description;
+    private String url;
 }

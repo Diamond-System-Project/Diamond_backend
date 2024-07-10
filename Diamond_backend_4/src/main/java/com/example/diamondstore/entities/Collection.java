@@ -27,6 +27,9 @@ public class Collection {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "img_url")
+    private String url;
+
     @JsonIgnore
     @OneToMany(mappedBy = "collectionId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private java.util.Collection<CollectionProducts> collectionProducts;
