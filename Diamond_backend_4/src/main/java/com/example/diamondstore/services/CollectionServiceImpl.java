@@ -109,7 +109,7 @@ public class CollectionServiceImpl implements CollectionService {
         }
         collection.setCollectionName(collectionDTO.getName());
         collection.setDescription(collectionDTO.getDescription());
-        collection.setUrl(collection.getUrl());
+        collection.setUrl(collectionDTO.getUrl());
 
         return collectionRepository.save(collection);
     }

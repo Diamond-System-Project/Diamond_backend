@@ -129,7 +129,7 @@ public class OrderDetailController {
 
 
     @GetMapping("/list/all")
-    @PreAuthorize("hasRole('ROLE_Manager')")
+    @PreAuthorize("hasAnyRole('ROLE_Manager', 'ROLE_Sales Staff')")
     public ResponseEntity<ApiResponse> getAllOrderDetails() {
         try {
             List<OrderDetail> orderDetails = orderDetailService.getAllOrderDetail();

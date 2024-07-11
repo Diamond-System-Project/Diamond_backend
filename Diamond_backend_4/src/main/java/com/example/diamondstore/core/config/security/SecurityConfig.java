@@ -48,7 +48,7 @@ public class SecurityConfig {
                                 "/api/diamond/create", "/api/diamond/update/*", "/api/mount/create", "/api/mount/update/*",
                                 "/api/mount/list/*", "/api/mount/type", "/api/inventory/all", "/api/inventory/create",
                                 "/api/inventory/*", "/api/inventory/update/*", "/api/inventory/delete/*", "/api/promotion/*",
-                                "/api/order_detail/list/all", "/api/order/processing/*",
+                                "/api/order/processing/*", "/api/productpromotion/delete/*",
                                 "/*/order/assign", "/api/productdiamond/update/*", "/api/productprice/product/*", "/api/productdiamond/*",
                                 "/api/productprice/*", "/api/productpromotion/*", "/api/productpromotion/product/*", "/*/order/cancel/*",
                                 "/api/productpromotion/promotion/*", "/api/promotion/*", "/api/promotion/update/*",
@@ -62,7 +62,8 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/diamond/all", "/api/mount/all", "/api/diamond/*",
                                 "/api/mount/*", "/api/order/all", "/api/warranty/create",
-                                "/api/warranty/update/*", "/api/warranty/all").hasAnyRole("Sales Staff", "Manager")
+                                "/api/warranty/update/*", "/api/warranty/all",
+                                "/api/order_detail/list/all").hasAnyRole("Sales Staff", "Manager")
 
                         .requestMatchers("/api/user/role/*").hasAnyRole("Manager", "Admin")
 
