@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @RestController
 @RequestMapping("api/dashboard")
 @RequiredArgsConstructor
@@ -126,6 +129,63 @@ public class DashboardController {
                     ApiResponse.builder()
                             .success(false)
                             .message("Calculate total revenue failed! Error: " + e.getMessage())
+                            .build());
+        }
+    }
+
+    @GetMapping("/weekly")
+    public ResponseEntity<ApiResponse> getDailyRevenueForWeek() {
+        try {
+            List<BigDecimal> list = dashboardService.getDailyRevenueForWeek();
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .success(true)
+                            .message("Get Daily Revenue For Week successfully")
+                            .data(list)
+                            .build());
+        } catch (Exception e) {
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .success(false)
+                            .message("Get Daily Revenue For Week failed! Error: " + e.getMessage())
+                            .build());
+        }
+    }
+
+    @GetMapping("/monthly")
+    public ResponseEntity<ApiResponse> getWeeklyRevenueForMonth() {
+        try {
+            List<BigDecimal> list = dashboardService.getWeeklyRevenueForMonth();
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .success(true)
+                            .message("Get Weekly Revenue For Month successfully")
+                            .data(list)
+                            .build());
+        } catch (Exception e) {
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .success(false)
+                            .message("Get Weekly Revenue For Month Error: " + e.getMessage())
+                            .build());
+        }
+    }
+
+    @GetMapping("/yearly")
+    public ResponseEntity<ApiResponse> getMonthlyRevenueForYear() {
+        try {
+            List<BigDecimal> list = dashboardService.getMonthlyRevenueForYear();
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .success(true)
+                            .message("Get Monthly Revenue For Year successfully")
+                            .data(list)
+                            .build());
+        } catch (Exception e) {
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .success(false)
+                            .message("Get Monthly Revenue For Year failed! Error: " + e.getMessage())
                             .build());
         }
     }
