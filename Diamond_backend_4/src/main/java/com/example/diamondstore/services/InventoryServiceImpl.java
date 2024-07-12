@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class InventoryServiceImpl implements InventoryService {
         saveInventory.setCondition(inventoryDTO.getCondition());
         saveInventory.setQuantity(inventoryDTO.getQuantity());
         saveInventory.setPurchaseDate(inventoryDTO.getPurchaseDate());
-        saveInventory.setUpdateDate(Date.from(Instant.now()));
+        saveInventory.setUpdateDate(LocalDate.now());
 
         if (inventoryDTO.getQuantity() == 0)
             saveInventory.setAvailable(false);

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -42,9 +43,8 @@ public class Comment {
     private User userId;
 
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "create_date")
-    private Date date;
+    private LocalDate date;
 }

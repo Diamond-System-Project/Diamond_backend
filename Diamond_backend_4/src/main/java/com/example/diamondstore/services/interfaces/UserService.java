@@ -7,6 +7,7 @@ import com.example.diamondstore.dto.UserLoginResponse;
 import com.example.diamondstore.entities.User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Service
 public interface UserService {
     boolean isEmailDuplicated(String email);
-    User register(String fullName, String email, String password, String phone, String gender, Date dob, String address);
+    User register(String fullName, String email, String password, String phone, String gender, LocalDate dob, String address);
     UserLoginResponse login(String username, String password);
     Optional<User> getUserId(int userid);
     User getUserById(int userid);

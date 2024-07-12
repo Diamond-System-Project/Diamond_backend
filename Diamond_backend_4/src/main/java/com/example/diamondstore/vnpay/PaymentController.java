@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 @RestController
@@ -34,7 +35,7 @@ public class PaymentController {
         int orderId = Integer.parseInt(request.getParameter("vnp_OrderInfo"));
         if (status.equals("00")) {
             Order order = orderRepository.findByOrderId(orderId);
-            order.setPayment_date(Date.from(Instant.now()));
+            order.setPayment_date(LocalDate.now());
             order.setPaymentStatus(true);
             orderRepository.save(order);
             return new ResponseObject<>(HttpStatus.OK, "Success", new PaymentDTO.VNPayResponse("00", "Success", "DCM KHO VAI LOL"));

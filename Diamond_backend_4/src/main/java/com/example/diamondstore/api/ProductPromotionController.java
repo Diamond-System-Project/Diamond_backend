@@ -125,19 +125,19 @@ public class ProductPromotionController {
                         .message("Discount must be between 0 and 1")
                         .build());
             }
-            else if(promotion.getStartDate().after(productPromotionDTO.getStartDate())){
+            else if(promotion.getStartDate().isAfter(productPromotionDTO.getStartDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("StartDate invalid")
                         .build());
             }
-            else if(promotion.getEndDate().before(productPromotionDTO.getEndDate())){
+            else if(promotion.getEndDate().isBefore(productPromotionDTO.getEndDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("EndDate invalid")
                         .build());
             }
-            else if(productPromotionDTO.getStartDate().after(productPromotionDTO.getEndDate())){
+            else if(productPromotionDTO.getStartDate().isAfter(productPromotionDTO.getEndDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("End Date must be larger than Start Date")
@@ -209,19 +209,19 @@ public class ProductPromotionController {
                         .message("Discount must be between 0 and 1")
                         .build());
             }
-            else if(promotion.getStartDate().after(productPromotionDTO.getStartDate())){
+            else if(promotion.getStartDate().isAfter(productPromotionDTO.getStartDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("StartDate invalid")
                         .build());
             }
-            else if(promotion.getEndDate().before(productPromotionDTO.getEndDate())){
+            else if(promotion.getEndDate().isBefore(productPromotionDTO.getEndDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("EndDate invalid")
                         .build());
             }
-            else if(productPromotionDTO.getStartDate().after(productPromotionDTO.getEndDate())){
+            else if(productPromotionDTO.getStartDate().isAfter(productPromotionDTO.getEndDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("End Date must be larger than Start Date")

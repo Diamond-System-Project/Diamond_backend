@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
         order.setPayment_method(createOrderRequestDTO.getOrder().getPayment_method());
         order.setStatus("Pending");
         order.setPaymentStatus(false);
+        order.setOrder_date(LocalDate.now());
         if(userId != null){
             User user = userRepository.findUserByUserId(userId);
             order.setCid(user);
@@ -170,9 +172,9 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findByOrderId(updateOrderStatusDTO.getOrderId());
         if(updateOrderStatusDTO.getStatus().equals("Delivered")){
             order.setStatus(updateOrderStatusDTO.getStatus());
-            order.setDelivery(Date.from(Instant.now()));
+            order.setDelivery(LocalDate.now());
             if(order.getPayment_method().equals("COD")){
-                order.setPayment_date(Date.from(Instant.now()));
+                order.setPayment_date(LocalDate.now());
                 order.setPaymentStatus(true);
             }
             if(order.getCid() != null){

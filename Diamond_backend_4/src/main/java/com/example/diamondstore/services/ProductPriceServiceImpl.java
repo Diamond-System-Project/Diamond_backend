@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class ProductPriceServiceImpl implements ProductPriceService {
                 .markupRate(productPriceDTO.getMarkupRate())
                 .costPrice(product.getComponentsPrice().add(product.getLaborFee()))
                 .sellingPrice((product.getComponentsPrice().add(product.getLaborFee())).multiply(BigDecimal.valueOf(productPriceDTO.getMarkupRate())))
-                .updateDate(Date.from(Instant.now()))
+                .updateDate(LocalDate.now())
                 .build());
 
         BigDecimal originalPrice = saveProductPrice.getSellingPrice();
@@ -73,7 +74,7 @@ public class ProductPriceServiceImpl implements ProductPriceService {
                     .markupRate(productPrice.getMarkupRate())
                     .costPrice(product.getComponentsPrice().add(product.getLaborFee()))
                     .sellingPrice((product.getComponentsPrice().add(product.getLaborFee())).multiply(BigDecimal.valueOf(productPrice.getMarkupRate())))
-                    .updateDate(Date.from(Instant.now()))
+                    .updateDate(LocalDate.now())
                     .build());
 
             BigDecimal originalPrice = saveProductPrice.getSellingPrice();

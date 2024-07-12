@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class User {
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "dob")
-    private Date dob;
+    private LocalDate dob;
 
     @Column(name = "gender")
     private String gender;
@@ -61,11 +62,15 @@ public class User {
     @Column(name = "type_login")
     private String typeLogin;
 
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "create_at")
-    private Date createAt;
+    private LocalDate createAt;
 
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "update_at")
-    private Date updateAt;
+    private LocalDate updateAt;
 
     @Column(name = "token_password")
     private String tokenPassword;
