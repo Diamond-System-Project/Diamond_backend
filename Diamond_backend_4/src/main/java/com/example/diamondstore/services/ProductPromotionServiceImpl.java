@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Component
@@ -186,7 +187,6 @@ public class ProductPromotionServiceImpl implements ProductPromotionService {
     public ProductPromotion changeStatus2(ProductPromotionDTO2 productPromotionDTO2) {
         Promotion promotion = promotionRepository.findPromotionByPromotionId(productPromotionDTO2.getPromotionId());
         Product product = productRepository.findProductByProductId(productPromotionDTO2.getProductId());
-        ProductPromotion savePP = new ProductPromotion();
 
         List<ProductPromotion> products = productPromotionRepository.findByProductId(product);
         for(ProductPromotion pp : products){
@@ -202,7 +202,11 @@ public class ProductPromotionServiceImpl implements ProductPromotionService {
 
         ProductPrice productPrice = productPriceRepository.findTop1ByProductIdOrderByUpdateDateDesc(product);
         if(productPrice != null && productPromotion.isActive()){
-            product.setPrice(productPrice.getSellingPrice().multiply(BigDecimal.valueOf(1 - productPromotion.getDiscount())));
+            BigDecimal originalPrice = productPrice.getSellingPrice().multiply(BigDecimal.valueOf(1 - productPromotion.getDiscount()));
+            BigDecimal roundedPrice = originalPrice.divide(new BigDecimal("10000"), 0, RoundingMode.UP)
+                    .multiply(new BigDecimal("10000"))
+                    .setScale(0, RoundingMode.HALF_UP);
+            product.setPrice(roundedPrice);
             productRepository.save(product);
         }
         else {
@@ -210,6 +214,6 @@ public class ProductPromotionServiceImpl implements ProductPromotionService {
             product.setPrice(productPrice.getSellingPrice());
             productRepository.save(product);
         }
-        return savePP;
+        return productPromotion;
     }
 }

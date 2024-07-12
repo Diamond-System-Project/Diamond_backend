@@ -53,7 +53,7 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public void updatePromotionStatus(int id) {
+    public Promotion updatePromotionStatus(int id) {
         List<Promotion> list = promotionRepository.findAll();
         Promotion promotion = promotionRepository.findPromotionByPromotionId(id);
 
@@ -65,7 +65,7 @@ public class PromotionServiceImpl implements PromotionService {
         }
 
         promotion.setActive(!promotion.isActive());
-        promotionRepository.save(promotion);
+        Promotion pro = promotionRepository.save(promotion);
 
         for(Promotion p : list){
             List<ProductPromotion> ppList = productPromotionRepository.findByPromotionId(p);
@@ -76,5 +76,6 @@ public class PromotionServiceImpl implements PromotionService {
                 }
             }
         }
+        return pro;
     }
 }

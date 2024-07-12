@@ -187,7 +187,7 @@ public class ProductPromotionController {
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('ROLE_Manager')")
-    public ResponseEntity<ApiResponse> updateProductPromotions(@RequestBody ProductPromotionDTO2 productPromotionDTO) throws Exception {
+    public ResponseEntity<ApiResponse> updateProductPromotion(@RequestBody ProductPromotionDTO2 productPromotionDTO) throws Exception {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());
             Product product = productService.getProductById(productPromotionDTO.getProductId());
@@ -245,7 +245,7 @@ public class ProductPromotionController {
 
     @PutMapping("/status")
     @PreAuthorize("hasRole('ROLE_Manager')")
-    public ResponseEntity<ApiResponse> changeProductPromotionsStatus(@RequestBody ProductPromotionDTO2 productPromotionDTO) throws Exception {
+    public ResponseEntity<ApiResponse> changeProductPromotionStatus(@RequestBody ProductPromotionDTO2 productPromotionDTO) throws Exception {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());
             Product product = productService.getProductById(productPromotionDTO.getProductId());

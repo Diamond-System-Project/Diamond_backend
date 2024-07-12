@@ -5,9 +5,11 @@ import com.example.diamondstore.dto.ProductDTO;
 import com.example.diamondstore.entities.Diamond;
 import com.example.diamondstore.entities.DiamondMount;
 import com.example.diamondstore.entities.Product;
+import com.example.diamondstore.entities.ProductPromotion;
 import com.example.diamondstore.response.ApiResponse;
 import com.example.diamondstore.services.interfaces.DiamondMountService;
 import com.example.diamondstore.services.interfaces.ProductPriceService;
+import com.example.diamondstore.services.interfaces.ProductPromotionService;
 import com.example.diamondstore.services.interfaces.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class ProductController {
     private DiamondMountService diamondMountService;
     @Autowired
     private ProductPriceService productPriceService;
+    @Autowired
+    private ProductPromotionService productPromotionService;
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllProduct() {
@@ -38,7 +42,13 @@ public class ProductController {
                     .build());
         }else{
             for(Product p : productList){
-                productPriceService.createProductPriceAuto(p.getProductId());
+                boolean pro = false;
+                List<ProductPromotion> pp = productPromotionService.getListByProductId(p.getProductId());
+                for (ProductPromotion prop : pp){
+                    if(prop.isActive()) pro = true;
+                }
+                if (!pro)
+                    productPriceService.createProductPriceAuto(p.getProductId());
             }
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
