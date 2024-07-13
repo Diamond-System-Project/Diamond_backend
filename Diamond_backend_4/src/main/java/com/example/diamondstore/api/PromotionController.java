@@ -124,10 +124,11 @@ public class PromotionController {
                         .message("Promotion Not Found")
                         .build());
             } else {
-                promotionService.updatePromotionStatus(id);
+                Promotion p = promotionService.updatePromotionStatus(id);
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(true)
                         .message("Update Promotion Status success!")
+                        .data(p)
                         .build());
             }
         }catch (Exception e){

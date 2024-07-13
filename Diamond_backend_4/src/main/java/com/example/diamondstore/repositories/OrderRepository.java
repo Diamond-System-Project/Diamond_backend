@@ -2,12 +2,16 @@ package com.example.diamondstore.repositories;
 import com.example.diamondstore.entities.Order;
 import com.example.diamondstore.entities.User;
 import jakarta.transaction.Transactional;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +31,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'Delivered'")
     int countCompleteOrder(); //Dem Status Deliver
 
-
     @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'Cancelled'")
     int countCancelOrder(); // Dem Cancel status
 
@@ -36,4 +39,16 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'Shipping' AND o.deliveryStaff = :deliveryStaff")
     int countShippingOrderByDeliveryId(@Param("deliveryStaff") User deliveryStaff);
+
+    @Query("SELECT COALESCE(SUM(o.payment), 0) FROM Order o WHERE o.payment_date BETWEEN :startDate AND :endDate AND o.status = 'Delivered'")
+    BigDecimal getRevenueBetweenDates(LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT COALESCE(SUM(o.payment), 0) FROM Order o WHERE o.payment_date BETWEEN :startDate AND :endDate AND o.status = 'Delivered' GROUP BY FUNCTION('DAY', o.payment_date)")
+    List<BigDecimal> getDailyRevenueBetweenDates(Date startDate, Date endDate);
+
+    @Query("SELECT COALESCE(SUM(o.payment), 0) FROM Order o WHERE o.payment_date BETWEEN :startDate AND :endDate AND o.status = 'Delivered' GROUP BY FUNCTION('WEEK', o.payment_date)")
+    List<BigDecimal> getWeeklyRevenueBetweenDates(Date startDate, Date endDate);
+
+    @Query("SELECT COALESCE(SUM(o.payment), 0) FROM Order o WHERE o.payment_date BETWEEN :startDate AND :endDate AND o.status = 'Delivered' GROUP BY FUNCTION('MONTH', o.payment_date)")
+    List<BigDecimal> getMonthlyRevenueBetweenDates(Date startDate, Date endDate);
 }

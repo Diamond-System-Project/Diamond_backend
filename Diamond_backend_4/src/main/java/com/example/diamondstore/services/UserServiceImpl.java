@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.Duration;
 import java.time.Instant;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
     private static final long EXPIRE_TOKEN=30;
 
     @Override
-    public User register(String fullName, String email, String password, String phone, String gender, Date dob, String address) {
+    public User register(String fullName, String email, String password, String phone, String gender, LocalDate dob, String address) {
         User saveUser = userRepository.save(User.builder()
                 .fullName(fullName)
                 .email(email)
@@ -40,12 +41,12 @@ public class UserServiceImpl implements UserService {
                 .phone(phone)
                 .gender(gender)
                 .dob(dob)
-                        .address(address)
+                .address(address)
                 .roleid(roleRepository.findRoleByRoleid(5))
                 .status("active")
                 .point(0)
                 .typeLogin("system account")
-                .createAt(Date.from(Instant.now()))
+                .createAt(LocalDate.now())
 
                 .build());
         return saveUser;
@@ -96,7 +97,7 @@ public class UserServiceImpl implements UserService {
         saveUser.setGender(updateUser.getGender());
         saveUser.setFullName(updateUser.getFullName());
         saveUser.setDob(updateUser.getDob());
-        saveUser.setUpdateAt(new Date());
+        saveUser.setUpdateAt(LocalDate.now());
 
         return userRepository.save(saveUser);
     }

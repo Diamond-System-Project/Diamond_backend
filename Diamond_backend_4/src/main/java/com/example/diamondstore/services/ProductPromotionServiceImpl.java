@@ -1,6 +1,7 @@
 package com.example.diamondstore.services;
 
 import com.example.diamondstore.dto.ProductPromotionDTO;
+import com.example.diamondstore.dto.ProductPromotionDTO2;
 import com.example.diamondstore.entities.Product;
 import com.example.diamondstore.entities.ProductPrice;
 import com.example.diamondstore.entities.ProductPromotion;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Component
@@ -129,5 +131,89 @@ public class ProductPromotionServiceImpl implements ProductPromotionService {
                 productRepository.save(product);
             }
         }
+    }
+
+    @Override
+    public ProductPromotion createProductPromotion2(ProductPromotionDTO2 productPromotionDTO2) {
+        Promotion promotion = promotionRepository.findPromotionByPromotionId(productPromotionDTO2.getPromotionId());
+        Product product = productRepository.findProductByProductId(productPromotionDTO2.getProductId());
+        ProductPromotion savePP = new ProductPromotion();
+
+        if(productPromotionRepository.findProductPromotionByPromotionIdAndProductId(
+                promotion, product) == null) {
+            savePP = productPromotionRepository.save(ProductPromotion.builder()
+                    .promotionId(promotion)
+                    .productId(product)
+                    .discount(productPromotionDTO2.getDiscount())
+                    .startDate(productPromotionDTO2.getStartDate())
+                    .endDate(productPromotionDTO2.getEndDate())
+                    .isActive(false)
+                    .build());
+        }
+        return savePP;
+    }
+
+    @Override
+    public boolean deleteProductPromotion2(int productPromotionId) {
+        try{
+            if (!productPromotionRepository.findByProductPromotionId(productPromotionId).isActive())
+                productPromotionRepository.deleteById(productPromotionId);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public ProductPromotion updateProductPromotion2(ProductPromotionDTO2 productPromotionDTO2) {
+        Promotion promotion = promotionRepository.findPromotionByPromotionId(productPromotionDTO2.getPromotionId());
+        Product product = productRepository.findProductByProductId(productPromotionDTO2.getProductId());
+        ProductPromotion savePP = new ProductPromotion();
+
+        ProductPromotion productPromotion = productPromotionRepository.findProductPromotionByPromotionIdAndProductId(
+                promotion, product);
+
+        if(!productPromotion.isActive()){
+            productPromotion.setDiscount(productPromotionDTO2.getDiscount());
+            productPromotion.setStartDate(productPromotionDTO2.getStartDate());
+            productPromotion.setEndDate(productPromotionDTO2.getEndDate());
+            savePP = productPromotionRepository.save(productPromotion);
+        }
+        return savePP;
+    }
+
+    @Override
+    public ProductPromotion changeStatus2(ProductPromotionDTO2 productPromotionDTO2) {
+        Promotion promotion = promotionRepository.findPromotionByPromotionId(productPromotionDTO2.getPromotionId());
+        Product product = productRepository.findProductByProductId(productPromotionDTO2.getProductId());
+
+        List<ProductPromotion> products = productPromotionRepository.findByProductId(product);
+        for(ProductPromotion pp : products){
+            if(pp.getPromotionId().getPromotionId() != promotion.getPromotionId())
+                pp.setActive(false);
+        }
+
+        ProductPromotion productPromotion = productPromotionRepository.findProductPromotionByPromotionIdAndProductId(
+                promotion, product);
+
+        productPromotion.setActive(!productPromotion.isActive());
+        productPromotionRepository.save(productPromotion);
+
+        ProductPrice productPrice = productPriceRepository.findTop1ByProductIdOrderByUpdateDateDesc(product);
+        if(productPrice != null && productPromotion.isActive()){
+            BigDecimal originalPrice = productPrice.getSellingPrice().multiply(BigDecimal.valueOf(1 - productPromotion.getDiscount()));
+            BigDecimal roundedPrice = originalPrice.divide(new BigDecimal("10000"), 0, RoundingMode.UP)
+                    .multiply(new BigDecimal("10000"))
+                    .setScale(0, RoundingMode.HALF_UP);
+            product.setPrice(roundedPrice);
+            productRepository.save(product);
+        }
+        else {
+            assert productPrice != null;
+            product.setPrice(productPrice.getSellingPrice());
+            productRepository.save(product);
+        }
+        return productPromotion;
     }
 }

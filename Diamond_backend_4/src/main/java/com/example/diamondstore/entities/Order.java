@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 
@@ -49,11 +50,10 @@ public class Order {
     private String email;
 
     @PastOrPresent(message = "Order date must be in the past or present")
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "order_date")
-    private Date order_date;
+    private LocalDate order_date;
 
     @Column(name = "status")
     private String status;
@@ -68,18 +68,18 @@ public class Order {
     @Column(name = "payment_status")
     private boolean paymentStatus;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "payment_date")
-    private Date payment_date;
+    private LocalDate payment_date;
 
     @Column(name = "payment_method")
     private String payment_method;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "delivery_date")
-    private Date delivery;
+    private LocalDate delivery;
 
     @ManyToOne
     @JoinColumn(name = "delivery_staffid")
@@ -91,10 +91,10 @@ public class Order {
     @PrePersist
     @PreUpdate
     public void validateDates() {
-        if (payment_date != null && order_date != null && payment_date.compareTo(order_date) < 0) {
+        if (payment_date != null && order_date != null && payment_date.isBefore(order_date)) {
             throw new IllegalArgumentException("Payment date must be after the order date");
         }
-        if (delivery != null && order_date != null && delivery.before(order_date)) {
+        if (delivery != null && order_date != null && delivery.isBefore(order_date)) {
             throw new IllegalArgumentException("Delivery date must be after the order date");
         }
     }

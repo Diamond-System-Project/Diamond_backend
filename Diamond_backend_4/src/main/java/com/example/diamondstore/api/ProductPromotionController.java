@@ -1,7 +1,9 @@
 package com.example.diamondstore.api;
 
 import com.example.diamondstore.dto.ProductPromotionDTO;
+import com.example.diamondstore.dto.ProductPromotionDTO2;
 import com.example.diamondstore.dto.ProductPromotionIdsDTO;
+import com.example.diamondstore.entities.Product;
 import com.example.diamondstore.entities.ProductPromotion;
 import com.example.diamondstore.entities.Promotion;
 import com.example.diamondstore.response.ApiResponse;
@@ -101,16 +103,17 @@ public class ProductPromotionController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_Manager')")
-    public ResponseEntity<ApiResponse> createProductPromotions(@RequestBody ProductPromotionDTO productPromotionDTO) throws Exception {
+    public ResponseEntity<ApiResponse> createProductPromotion(@RequestBody ProductPromotionDTO2 productPromotionDTO) throws Exception {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());
+            Product product = productService.getProductById(productPromotionDTO.getProductId());
             if(promotion == null){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("Promotion ID not found")
                         .build());
             }
-            else if(productPromotionDTO.getProductIds().isEmpty()){
+            else if(product == null){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("Product ID not found")
@@ -122,77 +125,79 @@ public class ProductPromotionController {
                         .message("Discount must be between 0 and 1")
                         .build());
             }
-            else if(promotion.getStartDate().after(productPromotionDTO.getStartDate())){
+            else if(promotion.getStartDate().isAfter(productPromotionDTO.getStartDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("StartDate invalid")
                         .build());
             }
-            else if(promotion.getEndDate().before(productPromotionDTO.getEndDate())){
+            else if(promotion.getEndDate().isBefore(productPromotionDTO.getEndDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("EndDate invalid")
                         .build());
             }
-            else if(productPromotionDTO.getStartDate().after(productPromotionDTO.getEndDate())){
+            else if(productPromotionDTO.getStartDate().isAfter(productPromotionDTO.getEndDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("End Date must be larger than Start Date")
                         .build());
             }
             else {
-                productPromotionService.createProductPromotion(productPromotionDTO);
+                ProductPromotion pp = productPromotionService.createProductPromotion2(productPromotionDTO);
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(true)
                         .message("Create product-promotion success!")
+                        .data(pp)
                         .build());
             }
         }catch (Exception e){
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(false)
-                    .message("Create product-price fail! Error: " + e.getMessage())
+                    .message("Create product-promotion fail! Error: " + e.getMessage())
                     .build());
         }
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_Manager')")
-    public ResponseEntity<ApiResponse> deleteProductPromotions(@RequestBody ProductPromotionIdsDTO productPromotionIdsDTO) {
-        List<Integer> productPromotionIds = productPromotionIdsDTO.getProductPriceIds();
+    public ResponseEntity<ApiResponse> deleteProductPromotion(@PathVariable int id) {
+        //List<Integer> productPromotionIds = productPromotionIdsDTO.getProductPriceIds();
         try{
-            boolean p = productPromotionService.deleteProductPromotions(productPromotionIds);
+            boolean p = productPromotionService.deleteProductPromotion2(id);
             if (p){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(true)
-                        .message("Delete List Success!")
+                        .message("Delete product-promotion Success!")
                         .build());
             }
             else{
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
-                        .message("Delete List fail!")
+                        .message("Delete product-promotion fail!")
                         .build());
             }
         }catch (Exception e){
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(false)
-                    .message("Delete List fail! Error: " + e.getMessage())
+                    .message("Delete product-promotion fail! Error: " + e.getMessage())
                     .build());
         }
     }
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('ROLE_Manager')")
-    public ResponseEntity<ApiResponse> updateProductPromotions(@RequestBody ProductPromotionDTO productPromotionDTO) throws Exception {
+    public ResponseEntity<ApiResponse> updateProductPromotion(@RequestBody ProductPromotionDTO2 productPromotionDTO) throws Exception {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());
+            Product product = productService.getProductById(productPromotionDTO.getProductId());
             if(promotion == null){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("Promotion ID not found")
                         .build());
             }
-            else if(productPromotionDTO.getProductIds().isEmpty()){
+            else if(product == null){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("Product ID not found")
@@ -204,51 +209,53 @@ public class ProductPromotionController {
                         .message("Discount must be between 0 and 1")
                         .build());
             }
-            else if(promotion.getStartDate().after(productPromotionDTO.getStartDate())){
+            else if(promotion.getStartDate().isAfter(productPromotionDTO.getStartDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("StartDate invalid")
                         .build());
             }
-            else if(promotion.getEndDate().before(productPromotionDTO.getEndDate())){
+            else if(promotion.getEndDate().isBefore(productPromotionDTO.getEndDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("EndDate invalid")
                         .build());
             }
-            else if(productPromotionDTO.getStartDate().after(productPromotionDTO.getEndDate())){
+            else if(productPromotionDTO.getStartDate().isAfter(productPromotionDTO.getEndDate())){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("End Date must be larger than Start Date")
                         .build());
             }
             else {
-                productPromotionService.updateProductPromotion(productPromotionDTO);
+                ProductPromotion pp = productPromotionService.updateProductPromotion2(productPromotionDTO);
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(true)
                         .message("Update product-promotion success!")
+                        .data(pp)
                         .build());
             }
         }catch (Exception e){
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(false)
-                    .message("Update product-price fail! Error: " + e.getMessage())
+                    .message("Update product-promotion fail! Error: " + e.getMessage())
                     .build());
         }
     }
 
     @PutMapping("/status")
     @PreAuthorize("hasRole('ROLE_Manager')")
-    public ResponseEntity<ApiResponse> changeProductPromotionsStatus(@RequestBody ProductPromotionDTO productPromotionDTO) throws Exception {
+    public ResponseEntity<ApiResponse> changeProductPromotionStatus(@RequestBody ProductPromotionDTO2 productPromotionDTO) throws Exception {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());
+            Product product = productService.getProductById(productPromotionDTO.getProductId());
             if(promotion == null){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("Promotion ID not found")
                         .build());
             }
-            else if(productPromotionDTO.getProductIds().isEmpty()){
+            else if(product == null){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("Product ID not found")
@@ -261,10 +268,11 @@ public class ProductPromotionController {
                         .build());
             }
             else {
-                productPromotionService.changeStatus(productPromotionDTO);
+                ProductPromotion pp = productPromotionService.changeStatus2(productPromotionDTO);
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(true)
                         .message("Change product-promotion status success!")
+                        .data(pp)
                         .build());
             }
         }catch (Exception e){
