@@ -12,4 +12,5 @@ public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
     Inventory findInventoryByLocationId(int id);
     List<Inventory> findByProductIdAndAvailable(Product product, boolean available);
     Inventory findTop1ByProductId(Product product);
+    List<Inventory> findInventoriesByProductId(Product product);
 }

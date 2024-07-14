@@ -2,10 +2,7 @@ package com.example.diamondstore.services;
 
 import com.example.diamondstore.dto.ProductDTO;
 import com.example.diamondstore.dto.ProductDescriptionDTO;
-import com.example.diamondstore.entities.Diamond;
-import com.example.diamondstore.entities.DiamondMount;
-import com.example.diamondstore.entities.Product;
-import com.example.diamondstore.entities.ProductDiamond;
+import com.example.diamondstore.entities.*;
 import com.example.diamondstore.repositories.*;
 import com.example.diamondstore.services.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +22,30 @@ public class ProductServiceImpl implements ProductService {
     private ProductDiamondRepository productDiamondRepository;
     @Autowired
     private DiamondRepository diamondRepository;
+    @Autowired
+    private InventoryRepository inventoryRepository;
 
     @Override
     public List<Product> productList() {
         List<Product> products = productRepository.findAll();
         for (Product p : products){
             p.setComponentsPrice(calculateComponentsPrice(p.getProductId()));
+            p.setStatus("OutOfStock");
+
+            List<Inventory> inventories = inventoryRepository.findInventoriesByProductId(p);
+            if (inventories.isEmpty()){
+                p.setStatus("OutOfStock");
+            }
+            else{
+                for(Inventory i : inventories){
+                    if(i.isAvailable() && i.getQuantity() > 0){
+                        p.setStatus("InStock");
+                    }
+                }
+            }
+            productRepository.save(p);
         }
+
         return products;
     }
 
