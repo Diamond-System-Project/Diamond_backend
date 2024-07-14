@@ -2,6 +2,7 @@ package com.example.diamondstore.api;
 
 import com.example.diamondstore.dto.DiamondDTO;
 import com.example.diamondstore.dto.ProductDTO;
+import com.example.diamondstore.dto.ProductDescriptionDTO;
 import com.example.diamondstore.entities.Diamond;
 import com.example.diamondstore.entities.DiamondMount;
 import com.example.diamondstore.entities.Product;
@@ -172,6 +173,23 @@ public class ProductController {
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(false)
                     .message("Get Product List Fail! Error: " + e.getMessage())
+                    .build());
+        }
+    }
+
+    @GetMapping("/description/{id}")
+    public ResponseEntity<ApiResponse> getProductDescription(@PathVariable int id) {
+        ProductDescriptionDTO dto = productService.getProductDescription(id);
+        if(dto != null){
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("Get Product Description By ID Success")
+                    .data(dto)
+                    .build());
+        }else{
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(false)
+                    .message("Get Product DescriptionBy ID Fail")
                     .build());
         }
     }

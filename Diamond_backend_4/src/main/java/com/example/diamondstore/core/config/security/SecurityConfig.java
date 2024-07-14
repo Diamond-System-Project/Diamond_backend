@@ -35,7 +35,7 @@ public class SecurityConfig {
                                 "/*/*/forgot-password", "/*/*/reset-password", "/*/product/list/*",
                                 "/*/*/createWithDetails", "/*/comment/product/*", "/api/order/*",
                                 "/*/product/all", "/*/*/showProduct/*", "/*/product/search/*",
-                                "/*/*/list/prices", "/api/order_detail/orderDetail/*",
+                                "/*/*/list/prices", "/api/order_detail/orderDetail/*", "/api/product/description/*",
                                 "/api/order_detail/order/*", "/api/warranty/orderDetail/*").permitAll() // Permit access to /login endpoint
 
                         .requestMatchers("/api/comment/add", "/api/comment/edit/*", "/api/order/createWithDetails",

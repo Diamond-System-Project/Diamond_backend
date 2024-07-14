@@ -1,6 +1,7 @@
 package com.example.diamondstore.services;
 
 import com.example.diamondstore.dto.ProductDTO;
+import com.example.diamondstore.dto.ProductDescriptionDTO;
 import com.example.diamondstore.entities.Diamond;
 import com.example.diamondstore.entities.DiamondMount;
 import com.example.diamondstore.entities.Product;
@@ -121,5 +122,45 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getProductsByMountType(String type) {
         return productRepository.findByMountType(type);
+    }
+
+    @Override
+    public ProductDescriptionDTO getProductDescription(int productId) {
+        ProductDescriptionDTO dto = new ProductDescriptionDTO();
+        Product product = productRepository.findProductByProductId(productId);
+        dto.setMountSize(diamondMountRepository.findDiamondMountByMountId(product.getMountId().getMountId()).getSize());
+
+        List<ProductDiamond> mainList = productDiamondRepository.findProductDiamondsByProductIdAndType(product, "Main");
+        List<ProductDiamond> sideList = productDiamondRepository.findProductDiamondsByProductIdAndType(product, "Side");
+
+        if (mainList.isEmpty()){
+            dto.setMainQuantity(0);
+            dto.setCaratWeight(0);
+            dto.setMainName("");
+            dto.setShape("");
+        }
+        else {
+            int mainQuantity = 0;
+            for (ProductDiamond pd : mainList){
+                mainQuantity += pd.getQuantity();
+            }
+            dto.setMainQuantity(mainQuantity);
+            dto.setMainName(diamondRepository.findDiamondByDiamondId(mainList.get(0).getDiamondId().getDiamondId()).getDiamondName());
+            dto.setCaratWeight(diamondRepository.findDiamondByDiamondId(mainList.get(0).getDiamondId().getDiamondId()).getCaratWeight());
+            dto.setShape(diamondRepository.findDiamondByDiamondId(mainList.get(0).getDiamondId().getDiamondId()).getShape());
+        }
+
+        if (sideList.isEmpty()){
+            dto.setSideQuantity(0);
+        }
+        else {
+            int sideQuantity = 0;
+            for (ProductDiamond pd : sideList){
+                sideQuantity += pd.getQuantity();
+            }
+            dto.setSideQuantity(sideQuantity);
+        }
+
+        return dto;
     }
 }

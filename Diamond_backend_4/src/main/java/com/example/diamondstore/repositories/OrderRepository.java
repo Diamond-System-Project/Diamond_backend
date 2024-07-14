@@ -1,22 +1,14 @@
 package com.example.diamondstore.repositories;
 import com.example.diamondstore.entities.Order;
 import com.example.diamondstore.entities.User;
-import jakarta.transaction.Transactional;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import java.math.BigDecimal;
-<<<<<<< HEAD
 import java.time.LocalDate;
-=======
->>>>>>> 926d650fe66cd2559ae22923062d447f2788f1b0
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
@@ -44,11 +36,9 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     int countShippingOrderByDeliveryId(@Param("deliveryStaff") User deliveryStaff);
 
     @Query("SELECT COALESCE(SUM(o.payment), 0) FROM Order o WHERE o.payment_date BETWEEN :startDate AND :endDate AND o.status = 'Delivered'")
-<<<<<<< HEAD
     BigDecimal getRevenueBetweenDates(LocalDate startDate, LocalDate endDate);
-=======
-    BigDecimal getRevenueBetweenDates(Date startDate, Date endDate);
->>>>>>> 926d650fe66cd2559ae22923062d447f2788f1b0
+
+    //BigDecimal getRevenueBetweenDates(Date startDate, Date endDate);
 
     @Query("SELECT COALESCE(SUM(o.payment), 0) FROM Order o WHERE o.payment_date BETWEEN :startDate AND :endDate AND o.status = 'Delivered' GROUP BY FUNCTION('DAY', o.payment_date)")
     List<BigDecimal> getDailyRevenueBetweenDates(Date startDate, Date endDate);
