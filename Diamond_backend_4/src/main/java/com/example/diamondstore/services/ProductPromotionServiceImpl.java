@@ -216,4 +216,9 @@ public class ProductPromotionServiceImpl implements ProductPromotionService {
         }
         return productPromotion;
     }
+
+    @Override
+    public ProductPromotion getProductPromotionByPromotionIdAndProductId(Promotion promotion, Product product) {
+        return productPromotionRepository.findProductPromotionByPromotionIdAndProductId(promotion, product);
+    }
 }

@@ -107,6 +107,7 @@ public class ProductPromotionController {
         try{
             Promotion promotion = promotionService.getPromotionById(productPromotionDTO.getPromotionId());
             Product product = productService.getProductById(productPromotionDTO.getProductId());
+            ProductPromotion productPromotion = productPromotionService.getProductPromotionByPromotionIdAndProductId(promotion, product);
             if(promotion == null){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
@@ -117,6 +118,11 @@ public class ProductPromotionController {
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("Product ID not found")
+                        .build());
+            }else if(productPromotion != null){
+                return ResponseEntity.ok(ApiResponse.builder()
+                        .success(false)
+                        .message("ProductPromotion Already Exists")
                         .build());
             }
             else if(productPromotionDTO.getDiscount() <= 0 || productPromotionDTO.getDiscount() >= 1){

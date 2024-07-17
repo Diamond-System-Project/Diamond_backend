@@ -61,7 +61,7 @@ public class PromotionController {
     @PreAuthorize("hasRole('ROLE_Manager')")
     public ResponseEntity<ApiResponse> createPromotion(@RequestBody PromotionDTO promotionDTO) throws Exception {
         try{
-            if(promotionDTO.getStartDate().compareTo(promotionDTO.getEndDate()) > 0){
+            if(promotionDTO.getStartDate().compareTo(promotionDTO.getEndDate()) >= 0){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
                         .message("End Date must be larger than Start Date")
