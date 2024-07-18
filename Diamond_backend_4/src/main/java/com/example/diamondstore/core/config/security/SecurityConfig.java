@@ -40,7 +40,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/comment/add", "/api/comment/edit/*", "/api/order/createWithDetails",
                                 "/api/order_detail/create", "/api/order_detail/*", "/api/order_detail/update/*",
-                                "/*/order/history/*", "/api/user/update/*", "/api/user/change-password/*",
+                                "/*/order/history/*", "/api/user/change-password/*",
                                 "/api/voucher/create/*").hasRole("Member")
 
                         .requestMatchers("/api/certificate/create", "/api/certificate/all", "/api/certificate/delete/*",

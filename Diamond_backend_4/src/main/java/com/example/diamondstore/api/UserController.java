@@ -98,7 +98,6 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<ApiResponse> updateUser(@PathVariable int id, @RequestBody UpdateUser updateUser, HttpServletRequest request) {
         try{
             String authorizationHeader = request.getHeader("Authorization");
