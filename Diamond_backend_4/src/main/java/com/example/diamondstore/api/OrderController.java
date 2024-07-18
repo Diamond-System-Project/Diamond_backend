@@ -352,11 +352,11 @@ public class OrderController {
                                 .success(false)
                                 .message("Assign failed: Invalid Delivery Staff")
                                 .build());
-            } else if (!(existingOrder.getStatus().equals("Pending") || existingOrder.getStatus().equals("Processing"))) {
+            } else if (!existingOrder.getStatus().equals("Processing")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         ApiResponse.builder()
                                 .success(false)
-                                .message("Assign failed: Can't change status of this Order")
+                                .message("Assign failed: Order needs to be processed")
                                 .build());
             }
             else if (existingOrder.getDeliveryStaff() != null) {

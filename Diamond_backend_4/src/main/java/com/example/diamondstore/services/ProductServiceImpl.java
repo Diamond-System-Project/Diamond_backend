@@ -86,8 +86,8 @@ public class ProductServiceImpl implements ProductService {
         saveProduct.setProductName(productDTO.getProductName());
         saveProduct.setDescription(productDTO.getDescription());
         saveProduct.setLaborFee(productDTO.getLaborFee());
-        saveProduct.setStatus(productDTO.getStatus());
-        saveProduct.setMountId(diamondMountRepository.findDiamondMountByMountId(productDTO.getMountId()));
+        //saveProduct.setStatus(productDTO.getStatus());
+        //saveProduct.setMountId(diamondMountRepository.findDiamondMountByMountId(productDTO.getMountId()));
         saveProduct.setUrl(productDTO.getUrl());
 
         return productRepository.save(saveProduct);

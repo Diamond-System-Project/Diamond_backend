@@ -100,35 +100,42 @@ public class UserController {
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_Member')")
     public ResponseEntity<ApiResponse> updateUser(@PathVariable int id, @RequestBody UpdateUser updateUser, HttpServletRequest request) {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
-            int userId = jwtUtil.extractUserId(token);
-            if(userId != id){
+        try{
+            String authorizationHeader = request.getHeader("Authorization");
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                String token = authorizationHeader.substring(7);
+                int userId = jwtUtil.extractUserId(token);
+                if(userId != id){
+                    return ResponseEntity.ok(ApiResponse.builder()
+                            .success(false)
+                            .message("Does not have permission to update this user!")
+                            .build());
+                }
+            }
+            if(!userService.getUserId(id).isPresent()){
                 return ResponseEntity.ok(ApiResponse.builder()
                         .success(false)
-                        .message("Does not have permission to update this user!")
+                        .message("Update fail! Can't find this user!")
                         .build());
             }
-        }
-        if(!userService.getUserId(id).isPresent()){
+            else if (updateUser.getPhone().length() != 10){
+                return ResponseEntity.ok(ApiResponse.builder()
+                        .success(false)
+                        .message("Update user fail! PhoneNumber wrong format!")
+                        .build());
+            }
+            else{
+                User upUser = userService.updateUser(updateUser, id);
+                return ResponseEntity.ok(ApiResponse.builder()
+                        .success(true)
+                        .message("User updated successfully")
+                        .data(upUser)
+                        .build());
+            }
+        }catch (Exception e){
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(false)
-                    .message("Update fail! Can't find this user!")
-                    .build());
-        }
-        else if (updateUser.getPhone().length() != 10){
-            return ResponseEntity.ok(ApiResponse.builder()
-                    .success(false)
-                    .message("Update user fail! PhoneNumber wrong format!")
-                    .build());
-        }
-        else{
-            User upUser = userService.updateUser(updateUser, id);
-            return ResponseEntity.ok(ApiResponse.builder()
-                    .success(true)
-                    .message("User updated successfully")
-                    .data(upUser)
+                    .message("Update user fail! Error: " + e.getMessage())
                     .build());
         }
     }
