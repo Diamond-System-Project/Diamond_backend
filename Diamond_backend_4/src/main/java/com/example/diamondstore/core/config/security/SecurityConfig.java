@@ -36,8 +36,9 @@ public class SecurityConfig {
                                 "/*/*/createWithDetails", "/*/comment/product/*", "/api/order/*",
                                 "/*/product/all", "/*/*/showProduct/*", "/*/product/search/*",
                                 "/*/*/list/prices", "/api/order_detail/orderDetail/*", "/api/product/description/*",
-                                "/api/order_detail/order/*", "/api/warranty/orderDetail/*", "api/collection/collectionName/*",
-                                "api/collection/all", "api/collection/product/collection/*", "api/collection/product/*").permitAll() // Permit access to /login endpoint
+                                "/api/order_detail/order/*", "/api/warranty/orderDetail/*", "/api/collection/collectionName/*",
+                                "/api/collection/all", "/api/collection/product/collection/*", "/api/collection/product/*",
+                                "/api/promotion/active").permitAll() // Permit access to /login endpoint
 
                         .requestMatchers("/api/comment/add", "/api/comment/edit/*", "/api/order/createWithDetails",
                                 "/api/order_detail/create", "/api/order_detail/*", "/api/order_detail/update/*",

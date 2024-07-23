@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
     Promotion findPromotionByPromotionId(int promotionId);
+    Promotion findPromotionByIsActive(boolean active);
 }

@@ -138,4 +138,21 @@ public class PromotionController {
                     .build());
         }
     }
+
+    @GetMapping("/active")
+    public ResponseEntity<ApiResponse> getActivePromotion() throws Exception {
+        Promotion promotion = promotionService.getActivePromotion();
+        if(promotion == null){
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(false)
+                    .message("No Promotion Is Active!")
+                    .build());
+        }else{
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("Get Active Promotion")
+                    .data(promotion)
+                    .build());
+        }
+    }
 }

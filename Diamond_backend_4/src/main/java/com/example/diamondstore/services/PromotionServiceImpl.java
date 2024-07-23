@@ -78,4 +78,9 @@ public class PromotionServiceImpl implements PromotionService {
         }
         return pro;
     }
+
+    @Override
+    public Promotion getActivePromotion() {
+        return promotionRepository.findPromotionByIsActive(true);
+    }
 }

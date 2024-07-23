@@ -15,4 +15,5 @@ public interface PromotionService {
     Promotion createPromotion(PromotionDTO promotionDTO);
     Promotion updatePromotion(PromotionDTO promotionDTO, int id);
     Promotion updatePromotionStatus(int id);
+    Promotion getActivePromotion();
 }
